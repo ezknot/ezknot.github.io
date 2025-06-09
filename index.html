@@ -1,279 +1,925 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <title>Global</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="description" content="HTML5 website template">
-  <meta name="keywords" content="global, template, html, sass, jquery">
-  <meta name="author" content="Bucky Maler">
-  <link rel="stylesheet" href="assets/css/main.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моя книга | Интерактивное издание</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap');
+        
+        :root {
+            /* Темная тема по умолчанию */
+            --bg-dark: #121212;
+            --bg-card: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --accent: #7f5af0;
+            --accent-light: #9370ff;
+            --border: #333;
+            --image-filter: brightness(0.8) contrast(1.2);
+        }
+
+        /* Светлая тема */
+        [data-theme="light"] {
+            --bg-dark: #f5f5f5;
+            --bg-card: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --accent: #6a5acd;
+            --accent-light: #7b68ee;
+            --border: #ddd;
+            --image-filter: none;
+        }
+        
+        body {
+            font-family: 'Noto Serif', serif;
+            line-height: 1.8;
+            color: var(--text-primary);
+            background-color: var(--bg-dark);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+        
+        .book-container {
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s ease-out;
+            padding: 2rem;
+        }
+        
+        .book-frame {
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            transition: all 0.5s ease;
+        }
+        
+        .title-frame {
+            border-top: 1px solid var(--accent);
+            border-bottom: 1px solid var(--accent);
+            padding: 2rem 0;
+            margin: 2rem 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .title-frame::before, .title-frame::after {
+            content: "◆";
+            color: var(--accent);
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+        }
+        
+        .title-frame::before {
+            left: 1rem;
+        }
+        
+        .title-frame::after {
+            right: 1rem;
+        }
+        
+        h1 {
+            color: var(--accent-light);
+            font-size: 2.5rem;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        h2 {
+            color: var(--accent);
+            margin-top: 3rem;
+            font-size: 1.8rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        h2::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+        }
+        
+        p {
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            text-align: justify;
+            font-size: 1.1rem;
+        }
+        
+        .chapter {
+            margin-bottom: 3rem;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .chapter-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin: 1.5rem 0;
+            filter: var(--image-filter);
+            transition: filter 0.5s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .chapter:hover {
+            transform: translateX(5px);
+        }
+        
+        .first-letter {
+            font-size: 3rem;
+            float: left;
+            line-height: 0.8;
+            margin-right: 0.5rem;
+            color: var(--accent-light);
+            font-weight: 700;
+            margin-top: 0.3rem;
+        }
+        
+        .quote {
+            font-style: italic;
+            color: var(--text-secondary);
+            border-left: 3px solid var(--accent);
+            padding: 1rem 1.5rem;
+            margin: 2rem 0;
+            background-color: rgba(127, 90, 240, 0.05);
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 4rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            margin: 2rem 0;
+        }
+
+        /* Элементы управления */
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .control-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+            background: var(--accent-light);
+        }
+
+        .audio-panel {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: var(--bg-card);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 99;
+            width: 200px;
+        }
+
+        .audio-panel.show {
+            display: flex;
+        }
+
+        .audio-option {
+            padding: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .audio-option:hover {
+            background-color: rgba(127, 90, 240, 0.1);
+        }
+
+        .audio-option.active {
+            background-color: rgba(127, 90, 240, 0.2);
+            font-weight: bold;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Стиль для выделения текста */
+        ::selection {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Вкладки */
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-family: 'Noto Serif', serif;
+            font-size: 1rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .tab:hover {
+            color: var(--text-primary);
+        }
+
+        .tab.active {
+            color: var(--accent-light);
+            font-weight: bold;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--accent-light);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Стили для отзывов */
+        .reviews-container {
+            margin-top: 30px;
+        }
+
+        .review {
+            background-color: rgba(127, 90, 240, 0.05);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .review-author {
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .review-date {
+            opacity: 0.7;
+        }
+
+        .review-text {
+            line-height: 1.6;
+        }
+
+        .review-form {
+            margin-top: 40px;
+            background-color: rgba(127, 90, 240, 0.05);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-secondary);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-primary);
+            font-family: 'Noto Serif', serif;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--accent-light);
+        }
+
+        /* Стили для аудиокниги */
+        .audio-book-container {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .audio-player {
+            width: 100%;
+            margin-top: 20px;
+            background-color: var(--bg-dark);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .audio-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .audio-btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .audio-btn:hover {
+            background-color: var(--accent-light);
+            transform: scale(1.1);
+        }
+
+        .audio-btn.big {
+            width: 50px;
+            height: 50px;
+        }
+
+        .audio-progress {
+            flex-grow: 1;
+            height: 5px;
+            background-color: var(--border);
+            border-radius: 5px;
+            margin: 0 15px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .audio-progress-filled {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background-color: var(--accent);
+            border-radius: 5px;
+            width: 0%;
+        }
+
+        .audio-time {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .audio-chapters {
+            margin-top: 30px;
+        }
+
+        .audio-chapter {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            background-color: rgba(127, 90, 240, 0.05);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .audio-chapter:hover {
+            background-color: rgba(127, 90, 240, 0.1);
+        }
+
+        .audio-chapter.active {
+            background-color: rgba(127, 90, 240, 0.2);
+            font-weight: bold;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+            }
+            
+            .book-container {
+                padding: 1rem;
+            }
+            
+            .book-frame {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .controls {
+                bottom: 10px;
+                right: 10px;
+            }
+
+            .audio-panel {
+                bottom: 70px;
+                right: 10px;
+                width: calc(100% - 20px);
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
 </head>
 <body>
-
-<!-- notification for small viewports and landscape oriented smartphones -->
-<div class="device-notification">
-  <a class="device-notification--logo" href="#0">
-    <img src="assets/img/logo.png" alt="Global">
-    <p>Global</p>
-  </a>
-  <p class="device-notification--message">Global has so much to offer that we must request you orient your device to portrait or find a larger screen. You won't be disappointed.</p>
-</div>
-
-<div class="perspective effect-rotate-left">
-  <div class="container"><div class="outer-nav--return"></div>
-    <div id="viewport" class="l-viewport">
-      <div class="l-wrapper">
-        <header class="header">
-          <a class="header--logo" href="#0">
-            <img src="assets/img/logo.png" alt="Global">
-            <p>Global</p>
-          </a>
-          <button class="header--cta cta">Hire Us</button>
-          <div class="header--nav-toggle">
-            <span></span>
-          </div>
-        </header>
-        <nav class="l-side-nav">
-          <ul class="side-nav">
-            <li class="is-active"><span>Home</span></li>
-            <li><span>Works</span></li>
-            <li><span>About</span></li>
-            <li><span>Contact</span></li>
-            <li><span>Hire us</span></li>
-          </ul>
-        </nav>
-        <ul class="l-main-content main-content">
-          <li class="l-section section section--is-active">
-            <div class="intro">
-              <div class="intro--banner">
-                <h1>Your next<br>interactive<br>experience</h1>
-                <button class="cta">Hire Us
-                  <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118" style="enable-background:new 0 0 150 118;" xml:space="preserve">
-                  <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
-                    <path d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z"/>
-                  </g>
-                  </svg>
-                  <span class="btn-background"></span>
-                </button>
-                <img src="assets/img/introduction-visual.png" alt="Welcome">
-              </div>
-              <div class="intro--options">
-                <a href="#0">
-                  <h3>Metiew &amp; Smith</h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do.</p>
-                </a>
-                <a href="#0">
-                  <h3>Fantasy interactive</h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do.</p>
-                </a>
-                <a href="#0">
-                  <h3>Paul &amp; shark</h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do.</p>
-                </a>
-              </div>
-            </div>
-          </li>
-          <li class="l-section section">
-            <div class="work">
-              <h2>Selected work</h2>
-              <div class="work--lockup">
-                <ul class="slider">
-                  <li class="slider--item slider--item-left">
-                    <a href="#0">
-                      <div class="slider--item-image">
-                        <img src="assets/img/work-victory.jpg" alt="Victory">
-                      </div>
-                      <p class="slider--item-title">Victory</p>
-                      <p class="slider--item-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do.</p>
-                    </a>
-                  </li>
-                  <li class="slider--item slider--item-center">
-                    <a href="#0">
-                      <div class="slider--item-image">
-                        <img src="assets/img/work-metiew-smith.jpg" alt="Metiew and Smith">
-                      </div>
-                      <p class="slider--item-title">Metiew &amp; Smith</p>
-                      <p class="slider--item-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do.</p>
-                    </a>
-                  </li>
-                  <li class="slider--item slider--item-right">
-                    <a href="#0">
-                      <div class="slider--item-image">
-                        <img src="assets/img/work-alex-nowak.jpg" alt="Alex Nowak">
-                      </div>
-                      <p class="slider--item-title">Alex Nowak</p>
-                      <p class="slider--item-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do.</p>
-                    </a>
-                  </li>
-                </ul>
-                <div class="slider--prev">
-                  <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                  viewBox="0 0 150 118" style="enable-background:new 0 0 150 118;" xml:space="preserve">
-                  <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
-                    <path d="M561,1169C525,1155,10,640,3,612c-3-13,1-36,8-52c8-15,134-145,281-289C527,41,562,10,590,10c22,0,41,9,61,29
-                    c55,55,49,64-163,278L296,510h575c564,0,576,0,597,20c46,43,37,109-18,137c-19,10-159,13-590,13l-565,1l182,180
-                    c101,99,187,188,193,199c16,30,12,57-12,84C631,1174,595,1183,561,1169z"/>
-                  </g>
-                  </svg>
-                </div>
-                <div class="slider--next">
-                  <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118" style="enable-background:new 0 0 150 118;" xml:space="preserve">
-                  <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
-                    <path d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z"/>
-                  </g>
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="l-section section">
-            <div class="about">
-              <div class="about--banner">
-                <h2>We<br>believe in<br>passionate<br>people</h2>
-                <a href="#0">Career
-                  <span>
-                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118" style="enable-background:new 0 0 150 118;" xml:space="preserve">
-                    <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
-                      <path d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z"/>
-                    </g>
-                    </svg>
-                  </span>
-                </a>
-                <img src="assets/img/about-visual.png" alt="About Us">
-              </div>
-              <div class="about--options">
-                <a href="#0">
-                  <h3>Winners</h3>
-                </a>
-                <a href="#0">
-                  <h3>Philosophy</h3>
-                </a>
-                <a href="#0">
-                  <h3>History</h3>
-                </a>
-              </div>
-            </div>
-          </li>
-          <li class="l-section section">
-            <div class="contact">
-              <div class="contact--lockup">
-                <div class="modal">
-                  <div class="modal--information">
-                    <p>Pawia 5, 31-154 Kraków, Poland</p>
-                    <a href="mailto:ouremail@gmail.com">ouremail@gmail.com</a>
-                    <a href="tel:+148126287560">+48 12 628 75 60</a>
-                  </div>
-                  <ul class="modal--options">
-                    <li><a href="#0">Bēhance</a></li>
-                    <li><a href="#0">dribbble</a></li>
-                    <li><a href="mailto:ouremail@gmail.com">Contact Us</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="l-section section">
-            <div class="hire">
-              <h2>You want us to do</h2>
-              <!-- checkout formspree.io for easy form setup -->
-              <form class="work-request">
-                <div class="work-request--options">
-                  <span class="options-a">
-                    <input id="opt-1" type="checkbox" value="app design">
-                    <label for="opt-1">
-                      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                      viewBox="0 0 150 111" style="enable-background:new 0 0 150 111;" xml:space="preserve">
-                      <g transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
-                        <path d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z"/>
-                      </g>
-                      </svg>
-                      App Design
-                    </label>
-                    <input id="opt-2" type="checkbox" value="graphic design">
-                    <label for="opt-2">
-                      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                      viewBox="0 0 150 111" style="enable-background:new 0 0 150 111;" xml:space="preserve">
-                      <g transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
-                        <path d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z"/>
-                      </g>
-                      </svg>
-                      Graphic Design
-                    </label>
-                    <input id="opt-3" type="checkbox" value="motion design">
-                    <label for="opt-3">
-                      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                      viewBox="0 0 150 111" style="enable-background:new 0 0 150 111;" xml:space="preserve">
-                      <g transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
-                        <path d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z"/>
-                      </g>
-                      </svg>
-                      Motion Design
-                    </label>
-                  </span>
-                  <span class="options-b">
-                    <input id="opt-4" type="checkbox" value="ux design">
-                    <label for="opt-4">
-                      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                      viewBox="0 0 150 111" style="enable-background:new 0 0 150 111;" xml:space="preserve">
-                      <g transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
-                        <path d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z"/>
-                      </g>
-                      </svg>
-                      UX Design
-                    </label>
-                    <input id="opt-5" type="checkbox" value="webdesign">
-                    <label for="opt-5">
-                      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                      viewBox="0 0 150 111" style="enable-background:new 0 0 150 111;" xml:space="preserve">
-                      <g transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
-                        <path d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z"/>
-                      </g>
-                      </svg>
-                      Webdesign
-                    </label>
-                    <input id="opt-6" type="checkbox" value="marketing">
-                    <label for="opt-6">
-                      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                      viewBox="0 0 150 111" style="enable-background:new 0 0 150 111;" xml:space="preserve">
-                      <g transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
-                        <path d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z"/>
-                      </g>
-                      </svg>
-                      Marketing
-                    </label>
-                  </span>
-                </div>
-                <div class="work-request--information">
-                  <div class="information-name">
-                    <input id="name" type="text" spellcheck="false">
-                    <label for="name">Name</label>
-                  </div>
-                  <div class="information-email">
-                    <input id="email" type="email" spellcheck="false">
-                    <label for="email">Email</label>
-                  </div>
-                </div>
-                <input type="submit" value="Send Request">
-              </form>
-            </div>
-          </li>
-        </ul>
-      </div>
+    <!-- Элементы управления -->
+    <div class="controls">
+        <button class="control-btn" id="themeToggle">🌓</button>
+        <button class="control-btn" id="audioToggle">🎵</button>
     </div>
-  </div>
-  <ul class="outer-nav">
-    <li class="is-active">Home</li>
-    <li>Works</li>
-    <li>About</li>
-    <li>Contact</li>
-    <li>Hire us</li>
-  </ul>
-</div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-2.2.4.min.js"><\/script>')</script>
-<script src="assets/js/functions-min.js"></script>
+    <!-- Панель аудио -->
+    <div class="audio-panel" id="audioPanel">
+        <div class="audio-option" data-sound="rain">🌧️ Дождь</div>
+        <div class="audio-option" data-sound="forest">🌲 Лес</div>
+        <div class="audio-option" data-sound="fire">🔥 Костер</div>
+        <div class="audio-option" data-sound="none">❌ Выключить</div>
+    </div>
+
+    <div class="book-container">
+        <div class="book-frame">
+            <!-- Вкладки -->
+            <div class="tabs">
+                <button class="tab active" data-tab="book">Книга</button>
+                <button class="tab" data-tab="audio">Аудиокнига</button>
+                <button class="tab" data-tab="reviews">Отзывы</button>
+            </div>
+
+            <!-- Содержимое вкладки книги -->
+            <div class="tab-content active" id="book-tab">
+                <!-- Обложка книги -->
+                <div class="title-frame">
+                    <h1>ТЁМНЫЕ БЕСКРАЙНИЕ</h1>
+                    <p style="color: var(--text-secondary);">Автор: Ваше Имя</p>
+                </div>
+                
+                <!-- Предисловие -->
+                <div class="chapter">
+                    <h2>Пролог</h2>
+                    <img src="https://source.unsplash.com/random/800x400/?dark,night" alt="Пролог" class="chapter-image">
+                    <p><span class="first-letter">Т</span>ьма сгущалась над городом, поглощая последние лучи заката. В этом предисловии я хочу провести вас через те мысли и переживания, которые легли в основу этой истории. Это не просто книга — это путешествие в глубины человеческой души.</p>
+                    
+                    <p>Каждая глава — новый слой реальности, который мы будем вместе исследовать. Современный ритм повествования сочетается здесь с вечными темами, которые тревожат нас под покровом ночи.</p>
+                    
+                    <div class="quote">
+                        "В темноте мы все одинаковы. Именно там исчезают маски, и остаётся только истина."
+                    </div>
+                </div>
+                
+                <!-- Глава 1 -->
+                <div class="chapter">
+                    <h2>Глава 1: Полночный город</h2>
+                    <img src="https://source.unsplash.com/random/800x400/?city,night" alt="Полночный город" class="chapter-image">
+                    <p><span class="first-letter">Г</span>ород никогда не спит — это ложь. В три часа ночи наступает момент абсолютной тишины, когда даже неоновые огни кажутся приглушёнными. Именно в этот час я впервые увидел Его.</p>
+                    
+                    <p>Тени на стенах двигались неестественным образом, будто жили собственной жизнью. Воздух был насыщен электричеством предгрозового напряжения, хотя метеорологи не предсказывали осадков.</p>
+                    
+                    <p>Мои часы показывали 3:07, когда все уличные фонари на набережной погасли одновременно. Не постепенно, не мигая — просто в один момент свет исчез, оставив после себя плотную, почти осязаемую тьму.</p>
+                </div>
+                
+                <!-- Глава 2 -->
+                <div class="chapter">
+                    <h2>Глава 2: Зов бездны</h2>
+                    <img src="https://source.unsplash.com/random/800x400/?abyss,dark" alt="Зов бездны" class="chapter-image">
+                    <p><span class="first-letter">С</span> тех пор как начались видения, сон стал для меня чужим городом, куда я не мог вернуться. Врачи разводили руками, антидепрессанты лишь усиливали яркость образов.</p>
+                    
+                    <p>Особенно чётко я видел его лицо — точнее, то, что должно было быть лицом. Гладкая, без черт, поверхность, отражающая моё собственное искажённое отражение. Оно приходило ровно в 3:14 ночи и стояло в ногах кровати, пока я не терял сознание от ужаса.</p>
+                    
+                    <div class="quote">
+                        "Когда реальность становится невыносимой, мы изобретаем новые способы её отрицать. Но правда подобна тени — чем ярче свет, тем она чётче."
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <div class="footer">
+                    <p>© 2023 | Все права защищены</p>
+                    <p>Написано в ночных часах</p>
+                </div>
+            </div>
+
+            <!-- Содержимое вкладки аудиокниги -->
+            <div class="tab-content" id="audio-tab">
+                <div class="title-frame">
+                    <h1>Аудиоверсия книги</h1>
+                    <p style="color: var(--text-secondary);">Озвучено профессиональным актёром</p>
+                </div>
+
+                <div class="audio-book-container">
+                    <p>Погрузитесь в атмосферу "Тёмных бескрайних" с нашей аудиоверсией. Профессиональная озвучка, музыкальное сопровождение и звуковые эффекты создадут полное ощущение присутствия в описываемых событиях.</p>
+                    
+                    <div class="audio-player">
+                        <h3>Сейчас играет: Пролог</h3>
+                        <div class="audio-controls">
+                            <button class="audio-btn" id="prevChapter">⏮</button>
+                            <button class="audio-btn big" id="playPause">▶</button>
+                            <button class="audio-btn" id="nextChapter">⏭</button>
+                        </div>
+                        <div class="audio-controls">
+                            <span class="audio-time" id="currentTime">0:00</span>
+                            <div class="audio-progress" id="audioProgress">
+                                <div class="audio-progress-filled" id="progressFilled"></div>
+                            </div>
+                            <span class="audio-time" id="duration">3:45</span>
+                        </div>
+                    </div>
+
+                    <div class="audio-chapters">
+                        <h3>Главы:</h3>
+                        <div class="audio-chapter active">Пролог (3:45)</div>
+                        <div class="audio-chapter">Глава 1: Полночный город (12:30)</div>
+                        <div class="audio-chapter">Глава 2: Зов бездны (15:20)</div>
+                        <div class="audio-chapter">Глава 3: Тени прошлого (18:45)</div>
+                        <div class="audio-chapter">Глава 4: Последний рассвет (22:10)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Содержимое вкладки отзывов -->
+            <div class="tab-content" id="reviews-tab">
+                <div class="title-frame">
+                    <h1>Отзывы читателей</h1>
+                    <p style="color: var(--text-secondary);">Поделитесь своим мнением о книге</p>
+                </div>
+
+                <div class="reviews-container">
+                    <div class="review">
+                        <div class="review-header">
+                            <span class="review-author">Алексей Петров</span>
+                            <span class="review-date">15 января 2023</span>
+                        </div>
+                        <div class="review-text">
+                            Невероятная атмосфера! Читал ночью при свечах и полностью погрузился в этот мрачный мир. Автор мастерски создаёт напряжение, которое не отпускает до самой последней страницы. Особенно впечатлила глава о полночном городе - описание теней было настолько реалистичным, что я несколько раз оглядывался через плечо.
+                        </div>
+                    </div>
+
+                    <div class="review">
+                        <div class="review-header">
+                            <span class="review-author">Мария Иванова</span>
+                            <span class="review-date">3 марта 2023</span>
+                        </div>
+                        <div class="review-text">
+                            Книга оставила смешанные чувства. С одной стороны, безупречный стиль и глубокая философия, с другой - слишком мрачно и безысходно. Возможно, это и было задумкой автора, но мне не хватило хоть какого-то просвета в этой тьме. Тем не менее, читала на одном дыхании и рекомендую любителям интеллектуального хоррора.
+                        </div>
+                    </div>
+
+                    <div class="review">
+                        <div class="review-header">
+                            <span class="review-author">Дмитрий Смирнов</span>
+                            <span class="review-date">22 апреля 2023</span>
+                        </div>
+                        <div class="review-text">
+                            Лучшая книга года! Купил бумажную версию после прочтения электронной - хочу перечитывать с карандашом в руках. Каждая фраза здесь выверена и наполнена смыслом. Особенно впечатлили цитаты - выписал несколько в свой дневник. Жду продолжения, хотя финал казался законченным. Автор - гений атмосферы и психологизма!
+                        </div>
+                    </div>
+
+                    <div class="review-form">
+                        <h3>Оставить отзыв</h3>
+                        <form id="reviewForm">
+                            <div class="form-group">
+                                <label for="name">Ваше имя:</label>
+                                <input type="text" id="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="review">Ваш отзыв:</label>
+                                <textarea id="review" required></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn">Отправить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Переключение темы
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        // Проверяем сохраненную тему в localStorage
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        body.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'light' ? '🌙' : '🌓';
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            themeToggle.textContent = newTheme === 'light' ? '🌙' : '🌓';
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Аудио-атмосфера
+        const audioToggle = document.getElementById('audioToggle');
+        const audioPanel = document.getElementById('audioPanel');
+        let currentAudio = null;
+        
+        audioToggle.addEventListener('click', () => {
+            audioPanel.classList.toggle('show');
+        });
+        
+        // Обработка выбора аудио
+        document.querySelectorAll('.audio-option').forEach(option => {
+            option.addEventListener('click', () => {
+                // Удаляем активный класс у всех опций
+                document.querySelectorAll('.audio-option').forEach(opt => {
+                    opt.classList.remove('active');
+                });
+                
+                // Добавляем активный класс к выбранной опции
+                option.classList.add('active');
+                
+                const sound = option.getAttribute('data-sound');
+                
+                // Останавливаем текущее аудио
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio = null;
+                }
+                
+                // Включаем новое аудио, если не выбрано "Выключить"
+                if (sound !== 'none') {
+                    currentAudio = new Audio(`sounds/${sound}.mp3`);
+                    currentAudio.loop = true;
+                    currentAudio.play().catch(e => console.log('Автовоспроизведение заблокировано:', e));
+                }
+                
+                // Скрываем панель через 1 секунду
+                setTimeout(() => {
+                    audioPanel.classList.remove('show');
+                }, 1000);
+            });
+        });
+
+        // Закрытие панели при клике вне ее
+        document.addEventListener('click', (e) => {
+            if (!audioPanel.contains(e.target) && e.target !== audioToggle) {
+                audioPanel.classList.remove('show');
+            }
+        });
+
+        // Загрузка случайных изображений для глав (можно заменить на свои)
+        document.querySelectorAll('.chapter-image').forEach(img => {
+            // В реальном проекте здесь должны быть ваши изображения
+            // img.src = `images/${img.alt.toLowerCase().replace(/ /g, '-')}.jpg`;
+        });
+
+        // Переключение вкладок
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Удаляем активный класс у всех вкладок и содержимого
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Добавляем активный класс к выбранной вкладке и соответствующему содержимому
+                tab.classList.add('active');
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+
+        // Форма отзыва
+        const reviewForm = document.getElementById('reviewForm');
+        const reviewsContainer = document.querySelector('.reviews-container');
+
+        reviewForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const reviewText = document.getElementById('review').value;
+            
+            if (name && reviewText) {
+                // Создаем новый отзыв
+                const newReview = document.createElement('div');
+                newReview.className = 'review';
+                newReview.innerHTML = `
+                    <div class="review-header">
+                        <span class="review-author">${name}</span>
+                        <span class="review-date">${new Date().toLocaleDateString('ru-RU')}</span>
+                    </div>
+                    <div class="review-text">${reviewText}</div>
+                `;
+                
+                // Вставляем новый отзыв перед формой
+                reviewsContainer.insertBefore(newReview, reviewForm);
+                
+                // Очищаем форму
+                reviewForm.reset();
+                
+                // Прокручиваем к новому отзыву
+                newReview.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        // Имитация аудиоплеера
+        const playPauseBtn = document.getElementById('playPause');
+        const prevChapterBtn = document.getElementById('prevChapter');
+        const nextChapterBtn = document.getElementById('nextChapter');
+        const audioProgress = document.getElementById('audioProgress');
+        const progressFilled = document.getElementById('progressFilled');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationEl = document.getElementById('duration');
+        const audioChapters = document.querySelectorAll('.audio-chapter');
+
+        let isPlaying = false;
+        let currentChapter = 0;
+        let progressInterval;
+
+        // Форматирование времени
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // Обновление прогресса
+        function updateProgress() {
+            // В реальном проекте здесь будет обновление от текущего времени аудио
+            const currentTime = Math.random() * 225; // 3:45 в секундах
+            const duration = 225;
+            
+            const progressPercent = (currentTime / duration) * 100;
+            progressFilled.style.width = `${progressPercent}%`;
+            
+            currentTimeEl.textContent = formatTime(currentTime);
+            durationEl.textContent = formatTime(duration);
+        }
+
+        // Переключение главы
+        function setChapter(index) {
+            if (index >= 0 && index < audioChapters.length) {
+                audioChapters.forEach(chapter => chapter.classList.remove('active'));
+                audioChapters[index].classList.add('active');
+                currentChapter = index;
+                
+                // В реальном проекте здесь будет загрузка новой главы
+                document.querySelector('.audio-player h3').textContent = `Сейчас играет: ${audioChapters[index].textContent.split(' (')[0]}`;
+                
+                // Сброс прогресса
+                progressFilled.style.width = '0%';
+                currentTimeEl.textContent = '0:00';
+                
+                // Установка длительности (из текста главы)
+                const durationText = audioChapters[index].textContent.match(/\((\d+:\d+)\)/)[1];
+                durationEl.textContent = durationText;
+            }
+        }
+
+        // Клик по прогрессу
+        audioProgress.addEventListener('click', (e) => {
+            const rect = audioProgress.getBoundingClientRect();
+            const pos = (e.clientX - rect.left) / rect.width;
+            progressFilled.style.width = `${pos * 100}%`;
+            
+            // В реальном проекте здесь будет установка времени аудио
+            const duration = 225; // 3:45 в секундах
+            currentTimeEl.textContent = formatTime(pos * duration);
+        });
+
+        // Управление плеером
+        playPauseBtn.addEventListener('click', () => {
+            isPlaying = !isPlaying;
+            
+            if (isPlaying) {
+                playPauseBtn.textContent = '⏸';
+                progressInterval = setInterval(updateProgress, 1000);
+            } else {
+                playPauseBtn.textContent = '▶';
+                clearInterval(progressInterval);
+            }
+        });
+
+        prevChapterBtn.addEventListener('click', () => {
+            setChapter(currentChapter - 1);
+            if (isPlaying) {
+                progressFilled.style.width = '0%';
+                currentTimeEl.textContent = '0:00';
+            }
+        });
+
+        nextChapterBtn.addEventListener('click', () => {
+            setChapter(currentChapter + 1);
+            if (isPlaying) {
+                progressFilled.style.width = '0%';
+                currentTimeEl.textContent = '0:00';
+            }
+        });
+
+        // Клик по главе
+        audioChapters.forEach((chapter, index) => {
+            chapter.addEventListener('click', () => {
+                setChapter(index);
+                if (isPlaying) {
+                    progressFilled.style.width = '0%';
+                    currentTimeEl.textContent = '0:00';
+                }
+            });
+        });
+
+        // Инициализация
+        setChapter(0);
+    </script>
 </body>
 </html>
