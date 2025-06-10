@@ -340,11 +340,13 @@
 
         .audio-player {
             width: 100%;
-            margin-top: 20px;
+            margin: 20px auto 0;
             background-color: var(--bg-card);
             border-radius: 8px;
             padding: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
+            box-sizing: border-box;
         }
 
         .audio-controls {
@@ -417,6 +419,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
+            text-align: left;
         }
 
         .audio-chapter:hover {
@@ -432,7 +435,6 @@
         @media (max-width: 768px) {
             body {
                 padding: 0;
-                font-size: 14px;
             }
             
             .book-container {
@@ -444,16 +446,18 @@
             }
             
             h1 {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
             
             h2 {
-                font-size: 1.4rem;
+                font-size: 1.5rem;
                 margin-top: 2rem;
             }
 
             p {
                 font-size: 1rem;
+                line-height: 1.6;
+                margin-bottom: 1.2rem;
             }
 
             .controls {
@@ -477,52 +481,47 @@
                 font-size: 0.9rem;
             }
 
-            /* Исправления для аудиокниги на мобильных */
-            .audio-book-container {
-                margin-top: 15px;
-            }
-
             .audio-player {
+                width: 100%;
                 padding: 10px;
             }
 
             .audio-controls {
-                flex-wrap: wrap;
                 gap: 10px;
             }
 
             .audio-progress {
-                order: 1;
-                width: 100%;
-                margin: 10px 0;
+                margin: 0 10px;
             }
 
             .audio-time {
-                min-width: auto;
+                min-width: 60px;
                 font-size: 0.8rem;
-            }
-
-            .audio-chapters {
-                margin-top: 20px;
-            }
-
-            .audio-chapter {
-                padding: 8px 12px;
-                font-size: 0.9rem;
             }
         }
 
         @media (max-width: 480px) {
-            body {
-                font-size: 13px;
+            .book-frame {
+                padding: 1rem;
+            }
+
+            .title-frame {
+                padding: 1.5rem 0;
+                margin: 1.5rem 0;
             }
 
             h1 {
-                font-size: 1.6rem;
+                font-size: 1.8rem;
             }
 
             h2 {
                 font-size: 1.3rem;
+            }
+
+            p {
+                font-size: 0.95rem;
+                line-height: 1.5;
+                margin-bottom: 1rem;
             }
 
             .first-letter {
@@ -531,6 +530,13 @@
 
             .chapter-image {
                 height: 200px;
+                margin: 1rem 0;
+            }
+
+            .quote {
+                padding: 0.8rem 1rem;
+                margin: 1.5rem 0;
+                font-size: 0.95rem;
             }
         }
     </style>
