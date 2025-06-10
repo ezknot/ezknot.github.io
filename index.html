@@ -332,53 +332,6 @@
             line-height: 1.6;
         }
 
-        .review-form {
-            margin-top: 40px;
-            background-color: rgba(127, 90, 240, 0.05);
-            padding: 20px;
-            border-radius: 8px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: var(--text-secondary);
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            background-color: var(--bg-dark);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            color: var(--text-primary);
-            font-family: 'Noto Serif', serif;
-        }
-
-        .form-group textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .submit-btn {
-            background-color: var(--accent);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .submit-btn:hover {
-            background-color: var(--accent-light);
-        }
-
         /* Стили для аудиокниги */
         .audio-book-container {
             margin-top: 30px;
@@ -388,7 +341,7 @@
         .audio-player {
             width: 100%;
             margin-top: 20px;
-            background-color: var(--bg-dark);
+            background-color: var(--bg-card);
             border-radius: 8px;
             padding: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
@@ -479,6 +432,7 @@
         @media (max-width: 768px) {
             body {
                 padding: 0;
+                font-size: 14px;
             }
             
             .book-container {
@@ -490,11 +444,16 @@
             }
             
             h1 {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
             
             h2 {
-                font-size: 1.5rem;
+                font-size: 1.4rem;
+                margin-top: 2rem;
+            }
+
+            p {
+                font-size: 1rem;
             }
 
             .controls {
@@ -506,6 +465,7 @@
                 bottom: 70px;
                 right: 10px;
                 width: calc(100% - 20px);
+                max-width: 200px;
             }
 
             .tabs {
@@ -515,6 +475,62 @@
             .tab {
                 padding: 8px 12px;
                 font-size: 0.9rem;
+            }
+
+            /* Исправления для аудиокниги на мобильных */
+            .audio-book-container {
+                margin-top: 15px;
+            }
+
+            .audio-player {
+                padding: 10px;
+            }
+
+            .audio-controls {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .audio-progress {
+                order: 1;
+                width: 100%;
+                margin: 10px 0;
+            }
+
+            .audio-time {
+                min-width: auto;
+                font-size: 0.8rem;
+            }
+
+            .audio-chapters {
+                margin-top: 20px;
+            }
+
+            .audio-chapter {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                font-size: 13px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            .first-letter {
+                font-size: 2.5rem;
+            }
+
+            .chapter-image {
+                height: 200px;
             }
         }
     </style>
@@ -637,7 +653,7 @@
             <div class="tab-content" id="reviews-tab">
                 <div class="title-frame">
                     <h1>Отзывы читателей</h1>
-                    <p style="color: var(--text-secondary);">Поделитесь своим мнением о книге</p>
+                    <p style="color: var(--text-secondary);">Отзывы временно недоступны</p>
                 </div>
 
                 <div class="reviews-container">
@@ -669,21 +685,6 @@
                         <div class="review-text">
                             Лучшая книга года! Купил бумажную версию после прочтения электронной - хочу перечитывать с карандашом в руках. Каждая фраза здесь выверена и наполнена смыслом. Особенно впечатлили цитаты - выписал несколько в свой дневник. Жду продолжения, хотя финал казался законченным. Автор - гений атмосферы и психологизма!
                         </div>
-                    </div>
-
-                    <div class="review-form">
-                        <h3>Оставить отзыв</h3>
-                        <form id="reviewForm">
-                            <div class="form-group">
-                                <label for="name">Ваше имя:</label>
-                                <input type="text" id="name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="review">Ваш отзыв:</label>
-                                <textarea id="review" required></textarea>
-                            </div>
-                            <button type="submit" class="submit-btn">Отправить</button>
-                        </form>
                     </div>
                 </div>
             </div>
@@ -778,39 +779,6 @@
                 const tabId = tab.getAttribute('data-tab');
                 document.getElementById(`${tabId}-tab`).classList.add('active');
             });
-        });
-
-        // Форма отзыва
-        const reviewForm = document.getElementById('reviewForm');
-        const reviewsContainer = document.querySelector('.reviews-container');
-
-        reviewForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const name = document.getElementById('name').value;
-            const reviewText = document.getElementById('review').value;
-            
-            if (name && reviewText) {
-                // Создаем новый отзыв
-                const newReview = document.createElement('div');
-                newReview.className = 'review';
-                newReview.innerHTML = `
-                    <div class="review-header">
-                        <span class="review-author">${name}</span>
-                        <span class="review-date">${new Date().toLocaleDateString('ru-RU')}</span>
-                    </div>
-                    <div class="review-text">${reviewText}</div>
-                `;
-                
-                // Вставляем новый отзыв перед формой
-                reviewsContainer.insertBefore(newReview, reviewForm);
-                
-                // Очищаем форму
-                reviewForm.reset();
-                
-                // Прокручиваем к новому отзыву
-                newReview.scrollIntoView({ behavior: 'smooth' });
-            }
         });
 
         // Имитация аудиоплеера
