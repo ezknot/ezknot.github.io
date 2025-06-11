@@ -321,6 +321,7 @@
 
         .audio-player {
             width: 100%;
+            max-width: 600px; /* Ограничиваем максимальную ширину */
             margin: 20px auto 0;
             background-color: var(--bg-card);
             border-radius: 8px;
@@ -333,8 +334,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
             margin-top: 15px;
+            flex-wrap: wrap; /* Для мобильных устройств */
         }
 
         .audio-btn {
@@ -358,12 +360,19 @@
 
         .audio-btn.big { width: 50px; height: 50px; }
 
+        .audio-progress-container {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
         .audio-progress {
             flex-grow: 1;
             height: 5px;
             background-color: var(--border);
             border-radius: 5px;
-            margin: 0 15px;
             position: relative;
             cursor: pointer;
         }
