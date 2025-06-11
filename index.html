@@ -918,34 +918,48 @@
         setChapter(0);
 
         // Эффект потери насыщенности при прокрутке
-        const chapterImages = document.querySelectorAll('.chapter-image');
-        
         function handleScroll() {
-            chapterImages.forEach(img => {
+            const images = document.querySelectorAll('.chapter-image');
+            const windowHeight = window.innerHeight;
+            
+            images.forEach(img => {
                 const rect = img.getBoundingClientRect();
-                const viewportHeight = window.innerHeight;
+                const imgTop = rect.top;
+                const imgBottom = rect.bottom;
                 
-                // Когда изображение находится в центре экрана, насыщенность максимальна
-                const distanceFromCenter = Math.abs(rect.top + rect.height/2 - viewportHeight/2);
+                // Рассчитываем, насколько изображение видно в окне
+                const visibleHeight = Math.min(imgBottom, windowHeight) - Math.max(imgTop, 0);
+                const visiblePercent = visibleHeight / rect.height;
                 
-                // Максимальное расстояние, на котором начинается эффект (половина высоты экрана)
-                const maxDistance = viewportHeight/2;
+                // Если изображение полностью видно - насыщенность 100%
+                // Если частично - уменьшаем насыщенность пропорционально видимой части
+                // Если не видно совсем - насыщенность 0%
+                let saturation = 1;
                 
-                // Процент расстояния от центра (0-1)
-                const distancePercent = Math.min(distanceFromCenter / maxDistance, 1);
+                if (imgTop >= windowHeight) {
+                    // Изображение ниже видимой области
+                    saturation = 0;
+                } else if (imgBottom <= 0) {
+                    // Изображение выше видимой области
+                    saturation = 0;
+                } else {
+                    // Изображение частично видно
+                    // Чем меньше видимая часть, тем меньше насыщенность
+                    saturation = visiblePercent;
+                }
                 
-                // Насыщенность уменьшается от 1 до 0.3 в зависимости от расстояния
-                const saturation = 1 - distancePercent * 0.7;
+                // Добавляем минимальную насыщенность, чтобы изображение не становилось совсем черно-белым
+                saturation = Math.max(saturation, 0.2);
                 
                 // Применяем фильтр
                 img.style.filter = `var(--image-filter) saturate(${saturation})`;
             });
         }
 
-        // Добавляем обработчик события прокрутки
+        // Добавляем обработчик скролла
         window.addEventListener('scroll', handleScroll);
         
-        // Вызываем сразу для начального состояния
+        // Вызываем сразу для инициализации
         handleScroll();
     </script>
 </body>
