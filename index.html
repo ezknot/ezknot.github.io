@@ -609,13 +609,13 @@
                 </div>
 
                 <div class="audio-book-container">
-                    <p>Погрузитесь в атмосферу "Тёмных бескрайних" с нашей аудиоверсией. Профессиональная озвучка, музыкальное сопровождение и звуковые эффекты создадут полное ощущение присутствия в описываемых событиях.</p>
+                    <p>Погрузитесь в атмосферу "Бобруйск-Кассиопея" с нашей аудиоверсией. Профессиональная озвучка, музыкальное сопровождение и звуковые эффекты создадут полное ощущение присутствия в описываемых событиях.</p>
                     <div class="audio-player">
                         <h3 id="currentChapterTitle">Пролог</h3>
                         <div class="audio-controls">
-                            <button class="audio-btn" id="prevChapter">↫</button>
-                            <button class="audio-btn big" id="playPause">▶</button>
-                            <button class="audio-btn" id="nextChapter">↬</button>
+                            <button class="audio-btn" id="prevChapter">˗ˏˋ</button>
+                            <button class="audio-btn big" id="playPause">✈︎ ▌▌</button>
+                            <button class="audio-btn" id="nextChapter">ˎˊ˗</button>
                         </div>
                         <div class="audio-progress-container">
                             <span class="audio-time" id="currentTime">0:00</span>
@@ -866,7 +866,7 @@
             togglePlay() {
                 this.isPlaying = !this.isPlaying;
                 const btn = document.getElementById('playPause');
-                btn.textContent = this.isPlaying ? '၊၊||၊' : '▶';
+                btn.textContent = this.isPlaying ? '(‿¤‿)' : '(‿ˠ‿)';
                 
                 if (this.isPlaying) {
                     this.audio.play().catch(e => console.log('Автовоспроизведение заблокировано:', e));
