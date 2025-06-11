@@ -572,9 +572,9 @@
 
     <!-- Панель аудио -->
     <div class="audio-panel" id="audioPanel">
-        <div class="audio-option" data-sound="rain">Ambient #1</div>
-        <div class="audio-option" data-sound="forest">Ambient #2</div>
-        <div class="audio-option" data-sound="fire">Ambient #3</div>
+        <div class="audio-option" data-sound="sound/ambient1.ogg">Ambient #1</div>
+        <div class="audio-option" data-sound="sound/ambient2.ogg">Ambient #2</div>
+        <div class="audio-option" data-sound="sound/ambient3.ogg">Ambient #3</div>
         <div class="audio-option" data-sound="none">❌ Выключить</div>
     </div>
 
@@ -767,7 +767,7 @@
                 
                 // Включаем новое аудио, если не выбрано "Выключить"
                 if (sound !== 'none') {
-                    currentAudio = new Audio(`sound/ambient1.ogg`);
+                    currentAudio = new Audio(sound);
                     currentAudio.loop = true;
                     currentAudio.play().catch(e => console.log('Автовоспроизведение заблокировано:', e));
                 }
