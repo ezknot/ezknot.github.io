@@ -83,6 +83,19 @@
             margin: 0;
             font-weight: 700;
             letter-spacing: 0.5px;
+            position: relative;
+        }
+        
+        /* Эффект звездочек вокруг заголовка */
+        .title-frame h1::before {
+            content: "✦✧✦";
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: rgba(127, 90, 240, 0.3);
+            letter-spacing: 3px;
         }
         
         h2 {
@@ -462,6 +475,13 @@
             .audio-time { min-width: 60px; font-size: 0.8rem; }
             .story-title { font-size: 1.3rem; }
             .story-meta { flex-direction: column; gap: 5px; }
+            
+            /* Замена ромбиков на черточки в мобильной версии */
+            .title-frame::before, .title-frame::after {
+                content: "—";
+                color: var(--accent);
+                font-size: 1.2rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -473,16 +493,22 @@
             .first-letter { font-size: 2.2rem; }
             .chapter-image { height: 200px; margin: 1rem 0; }
             .quote { padding: 0.8rem; margin: 1.2rem 0; font-size: 0.95rem; }
-            .title-frame::before, .title-frame::after { font-size: 0.8rem; }
+            .title-frame::before, .title-frame::after { font-size: 1rem; }
             .story-card { padding: 15px; }
             .story-title { font-size: 1.2rem; }
+            
+            /* Эффект звездочек для мобильной версии */
+            .title-frame h1::before {
+                font-size: 0.7rem;
+                top: -12px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="controls">
         <button class="control-btn" id="themeToggle">☀︎</button>
-        <button class="control-btn" id="audioToggle">🎧</button>
+        <button class="control-btn" id="audioToggle">♫</button>
     </div>
 
     <div class="audio-panel" id="audioPanel">
