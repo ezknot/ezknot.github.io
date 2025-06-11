@@ -138,6 +138,13 @@
             margin: 1.2rem 0;
             filter: var(--image-filter);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background: #2a2a2a;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .chapter-image.loaded {
+            opacity: 1;
         }
         
         .chapter:hover { transform: translateX(5px); }
@@ -474,7 +481,6 @@
             .story-title { font-size: 1.3rem; }
             .story-meta { flex-direction: column; gap: 5px; }
             
-            /* Убраны точки в мобильной версии */
             .title-frame::before, .title-frame::after {
                 content: "";
             }
@@ -529,7 +535,7 @@
                 
                 <div class="chapter">
                     <h2>Глава I: Алхимия пустых карманов&nbsp;</h2>
-                    <img src="images/gl1.webp" class="chapter-image" alt="Пролог">
+                    <img data-src="images/gl1.webp" class="chapter-image" alt="Пролог" loading="lazy">
                     <p><span class="first-letter">Т</span>ьма сгущалась над городом, поглощая последние лучи заката. В этом предисловии я хочу провести вас через те мысли и переживания, которые легли в основу этой истории. Это не просто книга — это путешествие в глубины человеческой души.</p>
                     <p>Каждая глава — новый слой реальности, который мы будем вместе исследовать. Современный ритм повествования сочетается здесь с вечными темами, которые тревожат нас под покровом ночи.</p>
                     <div class="quote">"Иногда пятак в диване - это последний знак что мир ещё не забыл тебя."</div>
@@ -537,7 +543,7 @@
                 
                 <div class="chapter">
                     <h2>Глава II: Экзистенциальный слалом</h2>
-                    <img src="images/gl2.webp" alt="Полночный город" class="chapter-image">
+                    <img data-src="images/gl2.webp" alt="Полночный город" class="chapter-image" loading="lazy">
                   <p><span class="first-letter">Г</span>ород никогда не спит — это ложь. В три часа ночи наступает момент абсолютной тишины, когда даже неоновые огни кажутся приглушёнными. Именно в этот час я впервые увидел Его.</p>
                     <p>Тени на стенах двигались неестественным образом, будто жили собственной жизнью. Воздух был насыщен электричеством предгрозового напряжения, хотя метеорологи не предсказывали осадков.</p>
                   <p>Мои часы показывали 3:07, когда все уличные фонари на набережной погасли одновременно. Не постепенно, не мигая — просто в один момент свет исчез, оставив после себя плотную, почти осязаемую тьму.</p>
@@ -546,7 +552,7 @@
                 
                 <div class="chapter">
                     <h2>Глава III: Люди из CD-Rая</h2>
-                    <img src="images/gl3.webp" alt="Зов бездны" class="chapter-image">
+                    <img data-src="images/gl3.webp" alt="Зов бездны" class="chapter-image" loading="lazy">
                   <p><span class="first-letter">С</span> тех пор как начались видения, сон стал для меня чужим городом, куда я не мог вернуться. Врачи разводили руками, антидепрессанты лишь усиливали яркость образов.</p>
                     <p>Особенно чётко я видел его лицо — точнее, то, что должно было быть лицом. Гладкая, без черт, поверхность, отражающая моё собственное искажённое отражение. Оно приходило ровно в 3:14 ночи и стояло в ногах кровати, пока я не терял сознание от ужаса.</p>
                     <div class="quote">
@@ -571,7 +577,7 @@
                 <div class="audio-book-container">
                     <p>Погрузитесь в атмосферу "Тёмных бескрайних" с нашей аудиоверсией. Профессиональная озвучка, музыкальное сопровождение и звуковые эффекты создадут полное ощущение присутствия в описываемых событиях.</p>
                     <div class="audio-player">
-                        <h3>Сейчас играет: Пролог</h3>
+                        <h3 id="currentChapterTitle">Пролог</h3>
                         <div class="audio-controls">
                             <button class="audio-btn" id="prevChapter">↫</button>
                             <button class="audio-btn big" id="playPause">▶</button>
@@ -582,17 +588,17 @@
                             <div class="audio-progress" id="audioProgress">
                                 <div class="audio-progress-filled" id="progressFilled"></div>
                             </div>
-                            <span class="audio-time" id="duration">3:45</span>
+                            <span class="audio-time" id="duration">0:00</span>
                         </div>
                     </div>
 
                     <div class="audio-chapters">
                         <h3>Главы:</h3>
-                        <div class="audio-chapter active">Аудиоверсия книги пока недоступна, сори.</div>
-                        <div class="audio-chapter">Глава 1: Полночный город (12:30)</div>
-                        <div class="audio-chapter">Глава 2: Зов бездны (15:20)</div>
-                        <div class="audio-chapter">Глава 3: Тени прошлого (18:45)</div>
-                        <div class="audio-chapter">Глава 4: Последний рассвет (22:10)</div>
+                        <div class="audio-chapter active" data-audio="audio/prologue.mp3" data-duration="3:45">Пролог (3:45)</div>
+                        <div class="audio-chapter" data-audio="audio/chapter1.mp3" data-duration="12:30">Глава 1: Полночный город (12:30)</div>
+                        <div class="audio-chapter" data-audio="audio/chapter2.mp3" data-duration="15:20">Глава 2: Зов бездны (15:20)</div>
+                        <div class="audio-chapter" data-audio="audio/chapter3.mp3" data-duration="18:45">Глава 3: Тени прошлого (18:45)</div>
+                        <div class="audio-chapter" data-audio="audio/chapter4.mp3" data-duration="22:10">Глава 4: Последний рассвет (22:10)</div>
                     </div>
                 </div>
             </div>
@@ -757,14 +763,115 @@
             });
         });
 
-        // Аудиоплеер
-        const playPauseBtn = document.getElementById('playPause');
-        let isPlaying = false;
-        
-        playPauseBtn.addEventListener('click', () => {
-            isPlaying = !isPlaying;
-            playPauseBtn.textContent = isPlaying ? '၊၊||၊' : '▶';
-        });
+        // Lazy loading изображений
+        const lazyLoadImages = () => {
+            const images = document.querySelectorAll('img[data-src]');
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.getAttribute('data-src');
+                        img.onload = () => {
+                            img.classList.add('loaded');
+                            img.removeAttribute('data-src');
+                        };
+                        observer.unobserve(img);
+                    }
+                });
+            }, {
+                rootMargin: '100px',
+                threshold: 0.1
+            });
+
+            images.forEach(img => observer.observe(img));
+        };
+
+        // Аудиоплеер для аудиокниг
+        const audioPlayer = {
+            audio: new Audio(),
+            currentChapter: 0,
+            isPlaying: false,
+            chapters: document.querySelectorAll('.audio-chapter'),
+            
+            init() {
+                this.audio.addEventListener('timeupdate', this.updateProgress.bind(this));
+                this.audio.addEventListener('ended', this.nextChapter.bind(this));
+                this.audio.addEventListener('loadedmetadata', this.updateDuration.bind(this));
+                
+                document.getElementById('playPause').addEventListener('click', this.togglePlay.bind(this));
+                document.getElementById('prevChapter').addEventListener('click', this.prevChapter.bind(this));
+                document.getElementById('nextChapter').addEventListener('click', this.nextChapter.bind(this));
+                document.getElementById('audioProgress').addEventListener('click', this.seek.bind(this));
+                
+                this.chapters.forEach((chapter, index) => {
+                    chapter.addEventListener('click', () => this.loadChapter(index));
+                });
+                
+                this.loadChapter(0);
+            },
+            
+            loadChapter(index) {
+                if (index >= 0 && index < this.chapters.length) {
+                    this.currentChapter = index;
+                    const chapter = this.chapters[index];
+                    const audioSrc = chapter.getAttribute('data-audio');
+                    
+                    this.chapters.forEach(c => c.classList.remove('active'));
+                    chapter.classList.add('active');
+                    
+                    document.getElementById('currentChapterTitle').textContent = chapter.textContent.split('(')[0].trim();
+                    document.getElementById('duration').textContent = chapter.getAttribute('data-duration');
+                    
+                    this.audio.src = audioSrc;
+                    if (this.isPlaying) {
+                        this.audio.play().catch(e => console.log('Автовоспроизведение заблокировано:', e));
+                    }
+                }
+            },
+            
+            togglePlay() {
+                this.isPlaying = !this.isPlaying;
+                const btn = document.getElementById('playPause');
+                btn.textContent = this.isPlaying ? '၊၊||၊' : '▶';
+                
+                if (this.isPlaying) {
+                    this.audio.play().catch(e => console.log('Автовоспроизведение заблокировано:', e));
+                } else {
+                    this.audio.pause();
+                }
+            },
+            
+            prevChapter() {
+                this.loadChapter(this.currentChapter - 1);
+            },
+            
+            nextChapter() {
+                this.loadChapter(this.currentChapter + 1);
+            },
+            
+            updateProgress() {
+                const progress = (this.audio.currentTime / this.audio.duration) * 100;
+                document.getElementById('progressFilled').style.width = `${progress}%`;
+                document.getElementById('currentTime').textContent = this.formatTime(this.audio.currentTime);
+            },
+            
+            updateDuration() {
+                document.getElementById('duration').textContent = this.formatTime(this.audio.duration);
+            },
+            
+            seek(e) {
+                const progressBar = document.getElementById('audioProgress');
+                const pos = (e.pageX - progressBar.getBoundingClientRect().left) / progressBar.offsetWidth;
+                this.audio.currentTime = pos * this.audio.duration;
+            },
+            
+            formatTime(seconds) {
+                if (isNaN(seconds)) return '0:00';
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            }
+        };
 
         // Раскрытие текста
         function toggleFullText(link) {
@@ -778,6 +885,12 @@
                 (isExpanded ? link : fullText).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }, 300);
         }
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            lazyLoadImages();
+            audioPlayer.init();
+        });
     </script>
 </body>
 </html>
