@@ -101,7 +101,6 @@
             position: relative;
             padding-bottom: 0.5rem;
             letter-spacing: 0.3px;
-            transition: color 0.3s ease, filter 0.3s ease;
         }
         
         h2::after {
@@ -112,7 +111,6 @@
             width: 50px;
             height: 2px;
             background: linear-gradient(90deg, var(--accent), transparent);
-            transition: opacity 0.3s ease;
         }
         
         p {
@@ -919,52 +917,42 @@
         // Инициализация
         setChapter(0);
 
-        // Эффект потери насыщенности при прокрутке для заголовков глав
+        // Эффект потери насыщенности при прокрутке
         function handleScroll() {
-            const chapterTitles = document.querySelectorAll('h2');
+            const images = document.querySelectorAll('.chapter-image');
             const windowHeight = window.innerHeight;
-            const windowWidth = window.innerWidth;
             
-            chapterTitles.forEach(title => {
-                const rect = title.getBoundingClientRect();
-                const titleTop = rect.top;
-                const titleBottom = rect.bottom;
-                const titleLeft = rect.left;
-                const titleRight = rect.right;
+            images.forEach(img => {
+                const rect = img.getBoundingClientRect();
+                const imgTop = rect.top;
+                const imgBottom = rect.bottom;
                 
-                // Рассчитываем расстояние до краев экрана
-                const distanceToTop = Math.max(0, titleTop);
-                const distanceToBottom = Math.max(0, windowHeight - titleBottom);
-                const distanceToLeft = Math.max(0, titleLeft);
-                const distanceToRight = Math.max(0, windowWidth - titleRight);
+                // Рассчитываем, насколько изображение видно в окне
+                const visibleHeight = Math.min(imgBottom, windowHeight) - Math.max(imgTop, 0);
+                const visiblePercent = visibleHeight / rect.height;
                 
-                // Находим минимальное расстояние до любого края
-                const minDistance = Math.min(distanceToTop, distanceToBottom, distanceToLeft, distanceToRight);
+                // Если изображение полностью видно - насыщенность 100%
+                // Если частично - уменьшаем насыщенность пропорционально видимой части
+                // Если не видно совсем - насыщенность 0%
+                let saturation = 1;
                 
-                // Определяем пороговое значение (когда начинать обесцвечивать)
-                const threshold = 150; // пикселей
-                
-                // Рассчитываем интенсивность цвета (1 - полный цвет, 0 - серый)
-                let colorIntensity = 1;
-                
-                if (minDistance < threshold) {
-                    colorIntensity = minDistance / threshold;
-                }
-                
-                // Применяем эффект к цвету
-                const baseColor = 'var(--accent)';
-                const grayColor = 'var(--text-secondary)';
-                
-                // Смешиваем цвета в зависимости от интенсивности
-                if (colorIntensity <= 0.3) {
-                    title.style.color = grayColor;
-                    title.style.filter = 'none';
-                    title.querySelector('::after').style.opacity = '0';
+                if (imgTop >= windowHeight) {
+                    // Изображение ниже видимой области
+                    saturation = 0;
+                } else if (imgBottom <= 0) {
+                    // Изображение выше видимой области
+                    saturation = 0;
                 } else {
-                    title.style.color = baseColor;
-                    title.style.filter = `saturate(${colorIntensity})`;
-                    title.querySelector('::after').style.opacity = `${colorIntensity}`;
+                    // Изображение частично видно
+                    // Чем меньше видимая часть, тем меньше насыщенность
+                    saturation = visiblePercent;
                 }
+                
+                // Добавляем минимальную насыщенность, чтобы изображение не становилось совсем черно-белым
+                saturation = Math.max(saturation, 0.2);
+                
+                // Применяем фильтр
+                img.style.filter = `var(--image-filter) saturate(${saturation})`;
             });
         }
 
