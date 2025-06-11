@@ -137,8 +137,7 @@
             object-fit: cover;
             border-radius: 6px;
             margin: 1.2rem 0;
-            filter: var(--image-filter) saturate(1);
-            transition: filter 0.5s ease;
+            filter: var(--image-filter);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         
@@ -476,9 +475,9 @@
             .story-title { font-size: 1.3rem; }
             .story-meta { flex-direction: column; gap: 5px; }
             
-            /* Замена ромбиков на черточки в мобильной версии */
+            /* Замена ромбиков на точки в мобильной версии */
             .title-frame::before, .title-frame::after {
-                content: "—";
+                content: "•";
                 color: var(--accent);
                 font-size: 1.2rem;
             }
@@ -782,18 +781,8 @@
             }, 300);
         }
 
-        // Эффекты при скролле
-        function handleScroll() {
-            document.querySelectorAll('.chapter-image').forEach(img => {
-                const rect = img.getBoundingClientRect();
-                const visibleHeight = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
-                const saturation = Math.max(visibleHeight / rect.height, 0.2);
-                img.style.filter = `var(--image-filter) saturate(${saturation})`;
-            });
-        }
-
-        window.addEventListener('scroll', handleScroll);
-        handleScroll();
+        // Удаляем обработчик скролла для эффекта изображений
+        window.removeEventListener('scroll', handleScroll);
     </script>
 </body>
 </html>
