@@ -86,7 +86,6 @@
             position: relative;
         }
         
-        /* Эффект звездочек вокруг заголовка */
         .title-frame h1::before {
             content: "✦✧✦";
             position: absolute;
@@ -475,11 +474,9 @@
             .story-title { font-size: 1.3rem; }
             .story-meta { flex-direction: column; gap: 5px; }
             
-            /* Замена ромбиков на точки в мобильной версии */
+            /* Убраны точки в мобильной версии */
             .title-frame::before, .title-frame::after {
-                content: "•";
-                color: var(--accent);
-                font-size: 1.2rem;
+                content: "";
             }
         }
 
@@ -492,11 +489,9 @@
             .first-letter { font-size: 2.2rem; }
             .chapter-image { height: 200px; margin: 1rem 0; }
             .quote { padding: 0.8rem; margin: 1.2rem 0; font-size: 0.95rem; }
-            .title-frame::before, .title-frame::after { font-size: 1rem; }
             .story-card { padding: 15px; }
             .story-title { font-size: 1.2rem; }
             
-            /* Эффект звездочек для мобильной версии */
             .title-frame h1::before {
                 font-size: 0.7rem;
                 top: -12px;
@@ -538,7 +533,6 @@
                     <p><span class="first-letter">Т</span>ьма сгущалась над городом, поглощая последние лучи заката. В этом предисловии я хочу провести вас через те мысли и переживания, которые легли в основу этой истории. Это не просто книга — это путешествие в глубины человеческой души.</p>
                     <p>Каждая глава — новый слой реальности, который мы будем вместе исследовать. Современный ритм повествования сочетается здесь с вечными темами, которые тревожат нас под покровом ночи.</p>
                     <div class="quote">"Иногда пятак в диване - это последний знак что мир еще не забыл тебя."</div>
-
                 </div>
                 
                 <div class="chapter">
@@ -563,7 +557,7 @@
                 
                 <div class="footer">
                     <p>© 2025 | Все права защищены</p>
-                  <p>Бредоказы 2.0 / Design by EtherKnot</p>
+                    <p>Бредоказы 2.0 / Design by EtherKnot</p>
                     <p>Графеновое И-издание ♒︎&nbsp;</p>
                 </div>
             </div>
@@ -706,14 +700,18 @@
         const themeToggle = document.getElementById('themeToggle');
         const body = document.body;
         const savedTheme = localStorage.getItem('theme') || 'dark';
-        body.setAttribute('data-theme', savedTheme);
-        themeToggle.textContent = savedTheme === 'light' ? '❍' : '☀︎';
+        
+        function applyTheme(theme) {
+            body.setAttribute('data-theme', theme);
+            themeToggle.textContent = theme === 'light' ? '❍' : '☀︎';
+            localStorage.setItem('theme', theme);
+        }
+        
+        applyTheme(savedTheme);
         
         themeToggle.addEventListener('click', () => {
             const newTheme = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-            body.setAttribute('data-theme', newTheme);
-            themeToggle.textContent = newTheme === 'light' ? '❍' : '☀︎';
-            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
         });
 
         // Аудио-панель
@@ -780,9 +778,6 @@
                 (isExpanded ? link : fullText).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }, 300);
         }
-
-        // Удаляем обработчик скролла для эффекта изображений
-        window.removeEventListener('scroll', handleScroll);
     </script>
 </body>
 </html>
