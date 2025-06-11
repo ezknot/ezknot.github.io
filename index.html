@@ -266,7 +266,13 @@
             display: flex;
             margin-bottom: 20px;
             border-bottom: 1px solid var(--border);
-            flex-wrap: wrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Для Firefox */
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none; /* Для Chrome и Safari */
         }
 
         .tab {
@@ -280,6 +286,8 @@
             position: relative;
             transition: all 0.3s ease;
             letter-spacing: normal;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .tab:hover {
@@ -588,12 +596,8 @@
                 max-width: 200px;
             }
 
-            .tabs {
-                flex-wrap: wrap;
-            }
-
             .tab {
-                padding: 8px 12px;
+                padding: 10px 15px;
                 font-size: 0.9rem;
             }
 
