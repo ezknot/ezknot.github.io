@@ -916,6 +916,37 @@
 
         // Инициализация
         setChapter(0);
+
+        // Функция для обработки прокрутки и изменения насыщенности изображений
+        function handleScroll() {
+            const images = document.querySelectorAll('.chapter-image');
+            const windowHeight = window.innerHeight;
+            
+            images.forEach(img => {
+                const rect = img.getBoundingClientRect();
+                const imgTop = rect.top;
+                const imgHeight = rect.height;
+                
+                // Рассчитываем, насколько изображение видно в окне
+                const visiblePart = Math.min(windowHeight, imgTop + imgHeight) - Math.max(0, imgTop);
+                const visibilityRatio = visiblePart / imgHeight;
+                
+                // Если изображение полностью видно (visibilityRatio ~1), насыщенность 100%
+                // Если изображение не видно (visibilityRatio <=0), насыщенность 0%
+                // Между этими значениями - плавный переход
+                const saturation = Math.min(1, Math.max(0, visibilityRatio));
+                
+                // Применяем фильтр с рассчитанной насыщенностью
+                img.style.filter = `brightness(${0.5 + saturation * 0.5}) contrast(${1 + saturation * 0.2}) saturate(${saturation * 100}%)`;
+            });
+        }
+        
+        // Добавляем обработчик события прокрутки
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('resize', handleScroll);
+        
+        // Вызываем сразу при загрузке, чтобы установить начальные значения
+        document.addEventListener('DOMContentLoaded', handleScroll);
     </script>
 </body>
 </html>
