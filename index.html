@@ -767,7 +767,7 @@
                 
                 // Включаем новое аудио, если не выбрано "Выключить"
                 if (sound !== 'none') {
-                    currentAudio = new Audio(`sounds/ambient1.ogg`);
+                    currentAudio = new Audio(`sound/ambient1.ogg`);
                     currentAudio.loop = true;
                     currentAudio.play().catch(e => console.log('Автовоспроизведение заблокировано:', e));
                 }
