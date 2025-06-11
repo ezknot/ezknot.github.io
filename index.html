@@ -266,6 +266,7 @@
             display: flex;
             margin-bottom: 20px;
             border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
         }
 
         .tab {
@@ -443,6 +444,106 @@
             font-weight: bold;
         }
 
+        /* Стили для архива */
+        .archive-container {
+            margin-top: 30px;
+        }
+
+        .story-card {
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .story-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .story-header {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .story-title {
+            color: var(--accent-light);
+            font-size: 1.5rem;
+            margin: 0 0 5px 0;
+        }
+
+        .story-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .story-date {
+            font-style: italic;
+        }
+
+        .story-author {
+            font-weight: bold;
+        }
+
+        .story-excerpt {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .story-full {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, opacity 0.3s ease;
+            opacity: 0;
+            margin-top: 15px;
+        }
+
+        .story-full.show {
+            max-height: 2000px; /* Достаточно большое значение */
+            opacity: 1;
+        }
+
+        .read-more {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            transition: color 0.3s ease;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .read-more:hover {
+            color: var(--accent-light);
+            text-decoration: underline;
+        }
+
+        .story-tags {
+            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .story-tag {
+            background-color: rgba(127, 90, 240, 0.1);
+            color: var(--accent);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .story-tag:hover {
+            background-color: rgba(127, 90, 240, 0.2);
+        }
+
         /* Адаптивность */
         @media (max-width: 768px) {
             body {
@@ -513,6 +614,15 @@
                 min-width: 60px;
                 font-size: 0.8rem;
             }
+
+            .story-title {
+                font-size: 1.3rem;
+            }
+
+            .story-meta {
+                flex-direction: column;
+                gap: 5px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -561,6 +671,14 @@
             .title-frame::after {
                 font-size: 0.8rem;
             }
+
+            .story-card {
+                padding: 15px;
+            }
+
+            .story-title {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
@@ -586,6 +704,7 @@
                 <button class="tab active" data-tab="book">Книга</button>
                 <button class="tab" data-tab="audio">Аудиокнига</button>
                 <button class="tab" data-tab="reviews">Отзывы</button>
+                <button class="tab" data-tab="archive">Архив</button>
             </div>
 
             <!-- Содержимое вкладки книги -->
@@ -713,6 +832,109 @@
                         </div>
                         <div class="review-text">
                             Лучшая книга года! Купил бумажную версию после прочтения электронной - хочу перечитывать с карандашом в руках. Каждая фраза здесь выверена и наполнена смыслом. Особенно впечатлили цитаты - выписал несколько в свой дневник. Жду продолжения, хотя финал казался законченным. Автор - гений атмосферы и психологизма!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Содержимое вкладки архива -->
+            <div class="tab-content" id="archive-tab">
+                <div class="title-frame">
+                    <h1>Архив рассказов</h1>
+                    <p style="color: var(--text-secondary);">Коллекция лучших произведений</p>
+                </div>
+
+                <div class="archive-container">
+                    <!-- Рассказ 1 -->
+                    <div class="story-card">
+                        <div class="story-header">
+                            <h3 class="story-title">Последний поезд в Бобруйск</h3>
+                            <div class="story-meta">
+                                <span class="story-date">15 марта 2023</span>
+                                <span class="story-author">Иван Петрович</span>
+                            </div>
+                        </div>
+                        <div class="story-excerpt">
+                            <p>Поезд №742 замедлял ход, приближаясь к полустанку. В окне мелькали редкие огни, далёкие и равнодушные, как звёзды над пустыней. Я знал, что этого поезда не существует в расписании, но почему-то оказался в его вагоне, среди теней, которые когда-то были людьми.</p>
+                            <p>Кондуктор в форме сороковых годов прошлого века проверял билеты. Его лицо было странно размыто, будто смазано на старой фотографии. Когда он подошёл ко мне, я понял, что мой билет недействителен...</p>
+                            
+                            <!-- Полный текст (изначально скрыт) -->
+                            <div class="story-full">
+                                <p>Кондуктор протянул руку - его пальцы были неестественно длинными, почти доходили до моих колен. "Ваш билет," - произнёс он голосом, который звучал как скрип несмазанных колёс.</p>
+                                <p>Я полез в карман и с ужасом осознал, что держу в руках не современный электронный билет, а пожелтевший бумажный листок с печатью 1943 года. На нём было написано моё имя, но дата отправления... дата отправления была сегодняшней.</p>
+                                <div class="quote">
+                                    "Некоторые поезда приходят только один раз в жизни. И уходят навсегда."
+                                </div>
+                                <p>Когда я поднял глаза, кондуктор уже шёл дальше по вагону. За окном мелькнула табличка "Бобруйск", но я точно знал - этого города на нашем маршруте быть не должно...</p>
+                            </div>
+                        </div>
+                        <a class="read-more" onclick="toggleFullText(this)">Читать полностью →</a>
+                        <div class="story-tags">
+                            <span class="story-tag">Мистика</span>
+                            <span class="story-tag">Железная дорога</span>
+                            <span class="story-tag">СССР</span>
+                        </div>
+                    </div>
+
+                    <!-- Рассказ 2 -->
+                    <div class="story-card">
+                        <div class="story-header">
+                            <h3 class="story-title">Кассиопея над свалкой</h3>
+                            <div class="story-meta">
+                                <span class="story-date">2 февраля 2023</span>
+                                <span class="story-author">Анна Космическая</span>
+                            </div>
+                        </div>
+                        <div class="story-excerpt">
+                            <p>Мы сидели на крыше заброшенного завода, разглядывая звёзды сквозь смог городской свалки. Водка была дешёвой, но звёзды — настоящими. Именно тогда Васька указал пальцем на Кассиопею и сказал: "Она мигает не так".</p>
+                            <p>Сначала мы не поняли, о чём он. Но через неделю Васька исчез. А ещё через месяц я нашёл его дневник в развалинах того самого завода. Последняя запись гласила: "Они не звёзды. Они глаза. И они смотрят..."</p>
+                            
+                            <!-- Полный текст (изначально скрыт) -->
+                            <div class="story-full">
+                                <p>Я открыл дневник на последней странице. Бумага была влажной и пахла ржавчиной. Почерк Васьки, обычно такой размашистый и уверенный, здесь дрожал, буквы сползали вниз, как будто он писал в темноте или в состоянии крайнего ужаса.</p>
+                                <p>"Они выбрали меня сегодня ночью. Сначала думал — галлюцинации от палёной водки. Но когда Кассиопея разомкнула свои звёзды как веки, я понял — это не галлюцинации. Они всегда были там. Просто теперь решили показаться."</p>
+                                <div class="quote">
+                                    "Когда смотришь на звёзды, помни — они тоже смотрят на тебя."
+                                </div>
+                                <p>На обороте последнего листа была нарисована странная схема — не созвездие, а скорее траектория, ведущая от нашей свалки куда-то за пределы карты. И подпись: "Они ждут на старом месте. 3:17 ночи. Не смотри вверх."</p>
+                            </div>
+                        </div>
+                        <a class="read-more" onclick="toggleFullText(this)">Читать полностью →</a>
+                        <div class="story-tags">
+                            <span class="story-tag">Космос</span>
+                            <span class="story-tag">Постапокалипсис</span>
+                            <span class="story-tag">Дружба</span>
+                        </div>
+                    </div>
+
+                    <!-- Рассказ 3 -->
+                    <div class="story-card">
+                        <div class="story-header">
+                            <h3 class="story-title">Графеновые сны</h3>
+                            <div class="story-meta">
+                                <span class="story-date">10 января 2023</span>
+                                <span class="story-author">Доктор Квант</span>
+                            </div>
+                        </div>
+                        <div class="story-excerpt">
+                            <p>Когда мне вживили первый графеновый нейрочип, врачи предупредили о возможных побочных эффектах: головные боли, тошнота, дезориентация. Никто не сказал мне о главном — чип начал записывать мои сны.</p>
+                            <p>Сначала это было забавно — проснуться и посмотреть запись своего сна, как фильм. Пока в одну из ночей я не увидел во сне лабораторию, где мне вживляли этот чип. На операционном столе лежал не я. И "врачи" не были людьми...</p>
+                            
+                            <!-- Полный текст (изначально скрыт) -->
+                            <div class="story-full">
+                                <p>Я пересматривал запись снова и снова. На операционном столе лежало... нечто с моим лицом, но тело было слишком длинным, суставы сгибались в неправильных местах. "Врачи" вокруг стояли неподвижно, их белые халаты скрывали нечеловеческие пропорции.</p>
+                                <p>Один из них повернулся к камере — вернее, к точке, откуда велась запись. Его глаза были сплошными чёрными сферами. "Не волнуйся, — сказал он голосом, который я узнал как свой собственный. — Скругление углов пройдёт. Ты привыкнешь к новой форме."</p>
+                                <div class="quote">
+                                    "Сны — это дверь. Но кто сказал, что дверь должна открываться только в одну сторону?"
+                                </div>
+                                <p>На следующее утро я обнаружил на запястье шрам, которого не было вчера. А когда посмотрел в зеркало, мне показалось, что мои зрачки стали чуть больше, чем должны быть...</p>
+                            </div>
+                        </div>
+                        <a class="read-more" onclick="toggleFullText(this)">Читать полностью →</a>
+                        <div class="story-tags">
+                            <span class="story-tag">Киберпанк</span>
+                            <span class="story-tag">Нанотехнологии</span>
+                            <span class="story-tag">Сновидения</span>
                         </div>
                     </div>
                 </div>
@@ -915,8 +1137,30 @@
             });
         });
 
-        // Инициализация
-        setChapter(0);
+        // Функция для раскрытия/скрытия полного текста рассказов
+        function toggleFullText(link) {
+            const storyCard = link.closest('.story-card');
+            const fullText = storyCard.querySelector('.story-full');
+            const isExpanded = fullText.classList.contains('show');
+            
+            if (isExpanded) {
+                fullText.classList.remove('show');
+                link.textContent = 'Читать полностью →';
+                
+                // Плавная прокрутка к ссылке
+                setTimeout(() => {
+                    link.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 300);
+            } else {
+                fullText.classList.add('show');
+                link.textContent = 'Свернуть ↑';
+                
+                // Плавная прокрутка к началу раскрытого текста
+                setTimeout(() => {
+                    fullText.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+            }
+        }
 
         // Эффект потери насыщенности при прокрутке для изображений
         function handleScroll() {
