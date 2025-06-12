@@ -483,7 +483,6 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.5s ease;
-            animation: floatAndRotate 8s linear infinite;
             transform-origin: center;
         }
 
@@ -961,61 +960,34 @@
             }, 300);
         }
 
-        // Анимированный смайл
+        // Анимированный смайл (одноразовый)
         function initFloatingSmiley() {
             const smiley = document.getElementById('floatingSmiley');
-            let isActive = false;
-            let animationFrameId = null;
-            let startTime = null;
-            let lastY = 0;
+            let wasShown = false; // Флаг, что анимация уже была показана
             
             // Показываем смайл при прокрутке к середине страницы
             window.addEventListener('scroll', () => {
+                if (wasShown) return; // Если уже показывали, больше не показываем
+                
                 const scrollPosition = window.scrollY;
                 const windowHeight = window.innerHeight;
                 const documentHeight = document.documentElement.scrollHeight;
                 const middlePosition = documentHeight / 2 - windowHeight / 2;
                 
-                // Если пользователь прокрутил до середины страницы и смайл еще не активен
-                if (scrollPosition >= middlePosition - 200 && !isActive) {
-                    isActive = true;
+                // Если пользователь прокрутил до середины страницы
+                if (scrollPosition >= middlePosition - 200) {
+                    wasShown = true; // Помечаем, что уже показали
                     smiley.style.opacity = '1';
                     smiley.style.left = '-100px';
                     smiley.style.top = `${windowHeight / 2}px`;
+                    smiley.style.animation = 'floatAndRotate 8s linear forwards'; // Анимация только один раз
                     
-                    // Запускаем анимацию
-                    startAnimation();
+                    // Через 8 секунд скрываем смайл (время анимации)
+                    setTimeout(() => {
+                        smiley.style.opacity = '0';
+                    }, 8000);
                 }
             });
-            
-            function startAnimation() {
-                if (animationFrameId) return;
-                
-                startTime = performance.now();
-                lastY = parseFloat(smiley.style.top) || window.innerHeight / 2;
-                
-                function animate(currentTime) {
-                    if (!startTime) startTime = currentTime;
-                    const elapsedTime = currentTime - startTime;
-                    
-                    // Анимация движения по X уже задана в CSS через keyframes
-                    // Добавляем небольшие колебания по Y
-                    const yOffset = Math.sin(elapsedTime / 500) * 50;
-                    smiley.style.top = `${lastY + yOffset}px`;
-                    
-                    animationFrameId = requestAnimationFrame(animate);
-                }
-                
-                animationFrameId = requestAnimationFrame(animate);
-                
-                // Через 8 секунд скрываем смайл (время анимации)
-                setTimeout(() => {
-                    smiley.style.opacity = '0';
-                    isActive = false;
-                    cancelAnimationFrame(animationFrameId);
-                    animationFrameId = null;
-                }, 8000);
-            }
         }
 
         // Инициализация
