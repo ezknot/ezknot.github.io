@@ -475,6 +475,36 @@
             background-color: rgba(127, 90, 240, 0.2);
         }
 
+        /* Стили для анимированного смайла */
+        .floating-smiley {
+            position: fixed;
+            font-size: 2rem;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            animation: floatAndRotate 8s linear infinite;
+            transform-origin: center;
+        }
+
+        @keyframes floatAndRotate {
+            0% {
+                transform: translateX(-100px) translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateX(calc(100vw - 100px)) translateY(-50px) rotate(90deg);
+            }
+            50% {
+                transform: translateX(calc(100vw - 100px)) translateY(50px) rotate(180deg);
+            }
+            75% {
+                transform: translateX(-100px) translateY(50px) rotate(270deg);
+            }
+            100% {
+                transform: translateX(-100px) translateY(0) rotate(360deg);
+            }
+        }
+
         @media (max-width: 768px) {
             .book-container, .book-frame { padding: 1rem; }
             h1 { font-size: 1.8rem; }
@@ -503,6 +533,10 @@
             
             .title-frame::before, .title-frame::after {
                 content: "";
+            }
+            
+            .floating-smiley {
+                font-size: 1.5rem;
             }
         }
 
@@ -536,10 +570,17 @@
                 width: 42px;
                 height: 42px;
             }
+            
+            .floating-smiley {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Анимированный смайл -->
+    <div class="floating-smiley" id="floatingSmiley">༼ﾉຈل͜ຈ༽ﾉ𓍊𓋼</div>
+
     <div class="controls">
         <button class="control-btn" id="themeToggle">☀︎</button>
         <button class="control-btn" id="audioToggle">♫</button>
@@ -920,10 +961,68 @@
             }, 300);
         }
 
+        // Анимированный смайл
+        function initFloatingSmiley() {
+            const smiley = document.getElementById('floatingSmiley');
+            let isActive = false;
+            let animationFrameId = null;
+            let startTime = null;
+            let lastY = 0;
+            
+            // Показываем смайл при прокрутке к середине страницы
+            window.addEventListener('scroll', () => {
+                const scrollPosition = window.scrollY;
+                const windowHeight = window.innerHeight;
+                const documentHeight = document.documentElement.scrollHeight;
+                const middlePosition = documentHeight / 2 - windowHeight / 2;
+                
+                // Если пользователь прокрутил до середины страницы и смайл еще не активен
+                if (scrollPosition >= middlePosition - 200 && !isActive) {
+                    isActive = true;
+                    smiley.style.opacity = '1';
+                    smiley.style.left = '-100px';
+                    smiley.style.top = `${windowHeight / 2}px`;
+                    
+                    // Запускаем анимацию
+                    startAnimation();
+                }
+            });
+            
+            function startAnimation() {
+                if (animationFrameId) return;
+                
+                startTime = performance.now();
+                lastY = parseFloat(smiley.style.top) || window.innerHeight / 2;
+                
+                function animate(currentTime) {
+                    if (!startTime) startTime = currentTime;
+                    const elapsedTime = currentTime - startTime;
+                    
+                    // Анимация движения по X уже задана в CSS через keyframes
+                    // Добавляем небольшие колебания по Y
+                    const yOffset = Math.sin(elapsedTime / 500) * 50;
+                    smiley.style.top = `${lastY + yOffset}px`;
+                    
+                    animationFrameId = requestAnimationFrame(animate);
+                }
+                
+                animationFrameId = requestAnimationFrame(animate);
+                
+                // Через 8 секунд скрываем смайл (время анимации)
+                setTimeout(() => {
+                    smiley.style.opacity = '0';
+                    isActive = false;
+                    cancelAnimationFrame(animationFrameId);
+                    animationFrameId = null;
+                }, 8000);
+            }
+        }
+
         // Инициализация
         document.addEventListener('DOMContentLoaded', () => {
             lazyLoadImages();
             audioPlayer.init();
+            initFloatingSmiley();
         });
     </script>
 </body>
