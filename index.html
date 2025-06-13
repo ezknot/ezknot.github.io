@@ -140,7 +140,8 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             background: #2a2a2a;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.5s ease, transform 0.5s ease-out;
+            transform-origin: center bottom;
         }
         
         .chapter-image.loaded {
@@ -990,11 +991,48 @@
             });
         }
 
+        // Параллакс-эффект для изображений глав
+        function initChapterParallax() {
+            const chapterImages = document.querySelectorAll('.chapter-image');
+            let lastScrollPosition = window.scrollY;
+            let isScrollingDown = false;
+            
+            window.addEventListener('scroll', () => {
+                const currentScrollPosition = window.scrollY;
+                isScrollingDown = currentScrollPosition > lastScrollPosition;
+                lastScrollPosition = currentScrollPosition;
+                
+                chapterImages.forEach(img => {
+                    const rect = img.getBoundingClientRect();
+                    const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+                    
+                    if (isVisible) {
+                        // Рассчитываем степень наклона в зависимости от положения на экране
+                        const imgCenter = rect.top + rect.height / 2;
+                        const screenCenter = window.innerHeight / 2;
+                        const distanceFromCenter = imgCenter - screenCenter;
+                        const maxDistance = window.innerHeight / 2 + rect.height / 2;
+                        const ratio = Math.min(Math.max(distanceFromCenter / maxDistance, -1), 1);
+                        
+                        if (isScrollingDown) {
+                            // При прокрутке вниз - наклон вправо
+                            const rotate = ratio * 5; // Максимальный угол наклона 5 градусов
+                            img.style.transform = `perspective(1000px) rotateX(${rotate}deg) rotateY(${rotate}deg)`;
+                        } else {
+                            // При прокрутке вверх - возвращаем в исходное положение
+                            img.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+                        }
+                    }
+                });
+            });
+        }
+
         // Инициализация
         document.addEventListener('DOMContentLoaded', () => {
             lazyLoadImages();
             audioPlayer.init();
             initFloatingSmiley();
+            initChapterParallax();
         });
     </script>
 </body>
