@@ -6,6 +6,10 @@
     <title>Бобруйск-Кассиопея | Графеновое И-издание</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
         
         :root {
             --bg-dark: #121212;
@@ -16,6 +20,7 @@
             --accent-light: #9370ff;
             --border: #333;
             --image-filter: brightness(0.8) contrast(1.2);
+            --current-font: 'Noto Serif', serif;
         }
 
         [data-theme="light"] {
@@ -30,7 +35,7 @@
         }
         
         body {
-            font-family: 'Noto Serif', serif;
+            font-family: var(--current-font);
             line-height: 1.6;
             color: var(--text-primary);
             background-color: var(--bg-dark);
@@ -214,6 +219,64 @@
         .control-btn:hover {
             transform: scale(1.1);
             background: var(--accent-light);
+        }
+
+        /* Стили для кнопки выбора шрифта */
+        .font-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px; /* Скругленные углы */
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+
+        .font-btn:hover {
+            transform: scale(1.1);
+            background: var(--accent-light);
+        }
+
+        /* Панель выбора шрифтов */
+        .font-panel {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: var(--bg-card);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 99;
+            width: 200px;
+        }
+
+        .font-panel.show { display: flex; }
+        
+        .font-option {
+            padding: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 15px;
+        }
+
+        .font-option:hover {
+            background-color: rgba(127, 90, 240, 0.1);
+        }
+
+        .font-option.active {
+            background-color: rgba(127, 90, 240, 0.2);
+            font-weight: bold;
         }
 
         .audio-panel {
@@ -511,7 +574,7 @@
             h2 { font-size: 1.4rem; margin-top: 2rem; }
             p { font-size: 1rem; line-height: 1.5; }
             .controls { bottom: 15px; right: 15px; }
-            .audio-panel { 
+            .audio-panel, .font-panel { 
                 bottom: 70px; 
                 right: 15px; 
                 width: calc(100% - 30px); 
@@ -584,6 +647,7 @@
     <div class="controls">
         <button class="control-btn" id="themeToggle">☀︎</button>
         <button class="control-btn" id="audioToggle">♫</button>
+        <button class="font-btn" id="fontToggle">𝓕</button>
     </div>
 
     <div class="audio-panel" id="audioPanel">
@@ -591,6 +655,14 @@
         <div class="audio-option" data-sound="Sound/ambient2.ogg">📻 Ambient Radio №2</div>
         <div class="audio-option" data-sound="Sound/ambient3.ogg">📻 Ambient Radio №3</div>
         <div class="audio-option" data-sound="none">❌ Выключить</div>
+    </div>
+
+    <div class="font-panel" id="fontPanel">
+        <div class="font-option active" data-font="'Noto Serif', serif">Noto Serif</div>
+        <div class="font-option" data-font="'Roboto', sans-serif">Roboto</div>
+        <div class="font-option" data-font="'PT Serif', serif">PT Serif</div>
+        <div class="font-option" data-font="'Open Sans', sans-serif">Open Sans</div>
+        <div class="font-option" data-font="'Playfair Display', serif">Playfair Display</div>
     </div>
 
     <div class="book-container">
@@ -826,6 +898,36 @@
         document.addEventListener('click', (e) => {
             if (!audioPanel.contains(e.target) && e.target !== audioToggle) {
                 audioPanel.classList.remove('show');
+            }
+        });
+
+        // Панель выбора шрифтов
+        const fontToggle = document.getElementById('fontToggle');
+        const fontPanel = document.getElementById('fontPanel');
+        const savedFont = localStorage.getItem('font') || "'Noto Serif', serif";
+        
+        function applyFont(font) {
+            document.documentElement.style.setProperty('--current-font', font);
+            document.querySelectorAll('.font-option').forEach(opt => opt.classList.remove('active'));
+            document.querySelector(`.font-option[data-font="${font}"]`).classList.add('active');
+            localStorage.setItem('font', font);
+        }
+        
+        applyFont(savedFont);
+        
+        fontToggle.addEventListener('click', () => fontPanel.classList.toggle('show'));
+        
+        document.querySelectorAll('.font-option').forEach(option => {
+            option.addEventListener('click', () => {
+                const font = option.getAttribute('data-font');
+                applyFont(font);
+                setTimeout(() => fontPanel.classList.remove('show'), 1000);
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!fontPanel.contains(e.target) && e.target !== fontToggle) {
+                fontPanel.classList.remove('show');
             }
         });
 
