@@ -223,8 +223,8 @@
 
         /* Стили для кнопки выбора шрифта */
         .font-btn {
-            background: var(--accent);
-            color: white;
+            background: #2a2a2a; /* Оставил темный цвет */
+            color: var(--accent-light); /* Оставил светло-фиолетовый цвет */
             border: none;
             width: 40px;
             height: 40px;
@@ -236,11 +236,13 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
             font-size: 18px;
+            border: 1px solid var(--border);
         }
 
         .font-btn:hover {
             transform: scale(1.1);
-            background: var(--accent-light);
+            background: #333;
+            color: var(--accent-light);
         }
 
         /* Панель выбора шрифтов */
