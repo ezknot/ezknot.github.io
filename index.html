@@ -130,7 +130,6 @@
         
         .chapter {
             margin-bottom: 2.5rem;
-            transition: transform 0.3s ease;
         }
 
         .chapter-image-container {
@@ -142,7 +141,6 @@
             border-radius: 6px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             background: transparent;
-            perspective: 1000px;
         }
 
         .chapter-image-slider {
@@ -158,11 +156,7 @@
             object-fit: cover;
             filter: var(--image-filter);
             opacity: 0;
-            transition: opacity 0.8s ease, transform 0.8s ease;
-            transform-style: preserve-3d;
-            background: transparent;
-            transform-origin: center center;
-            will-change: transform;
+            transition: opacity 0.8s ease;
         }
         
         .chapter-image.loaded {
@@ -634,59 +628,6 @@
             }
         }
 
-        /* Стили для увеличенного изображения */
-        .image-zoom-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .image-zoom-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .zoomed-image {
-            max-width: 95%;
-            max-height: 95%;
-            object-fit: contain;
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
-        }
-
-        .zoomed-image.zoom-active {
-            transform: scale(1.1);
-        }
-
-        .close-zoom {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            color: white;
-            font-size: 2rem;
-            cursor: pointer;
-            background: none;
-            border: none;
-            z-index: 1001;
-            opacity: 0.8;
-            transition: opacity 0.3s;
-        }
-
-        .close-zoom:hover {
-            opacity: 1;
-        }
-
         @media (max-width: 768px) {
             .book-container, .book-frame { padding: 1rem; }
             h1 { font-size: 1.8rem; }
@@ -721,11 +662,6 @@
             
             .floating-smiley {
                 font-size: 1.5rem;
-            }
-
-            .zoomed-image {
-                max-width: 98%;
-                max-height: 98%;
             }
         }
 
@@ -763,26 +699,12 @@
             .floating-smiley {
                 font-size: 1.2rem;
             }
-
-            .zoomed-image {
-                transform: scale(0.95);
-            }
-            
-            .zoomed-image.zoom-active {
-                transform: scale(1);
-            }
         }
     </style>
 </head>
 <body>
     <!-- Анимированный смайл -->
     <div class="floating-smiley" id="floatingSmiley">༼ﾉຈل͜ຈ༽ﾉ𓍊𓋼</div>
-
-    <!-- Оверлей для увеличенного изображения -->
-    <div class="image-zoom-overlay" id="imageZoomOverlay">
-        <button class="close-zoom" id="closeZoom">&times;</button>
-        <img src="" alt="Увеличенное изображение" class="zoomed-image" id="zoomedImage">
-    </div>
 
     <div class="controls">
         <button class="control-btn" id="themeToggle">☀︎</button>
@@ -1257,102 +1179,7 @@
             });
         }
 
-        // Параллакс-эффект для изображений глав с увеличением
-        function initChapterParallax() {
-            const chapterImages = document.querySelectorAll('.chapter-image.loaded');
-            const zoomOverlay = document.getElementById('imageZoomOverlay');
-            const zoomedImage = document.getElementById('zoomedImage');
-            const closeZoom = document.getElementById('closeZoom');
-            
-            // Генерируем случайные параметры параллакса для каждого изображения
-            chapterImages.forEach(img => {
-                // Случайное направление (-1 или 1)
-                img.dataset.parallaxDirection = Math.random() > 0.5 ? 1 : -1;
-                // Случайная интенсивность (от 0.5 до 1.5)
-                img.dataset.parallaxIntensity = (Math.random() * 1 + 0.5).toFixed(2);
-            });
-            
-            // Отслеживаем видимость глав для сдвига
-            const chapters = document.querySelectorAll('.chapter');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        // Если видно больше 50% главы
-                        if (entry.intersectionRatio > 0.5) {
-                            entry.target.style.transform = 'translateX(5px)';
-                        } else {
-                            entry.target.style.transform = 'translateX(0)';
-                        }
-                    } else {
-                        entry.target.style.transform = 'translateX(0)';
-                    }
-                });
-            }, {
-                threshold: [0, 0.5, 1]
-            });
-
-            chapters.forEach(chapter => {
-                observer.observe(chapter);
-            });
-            
-            window.addEventListener('scroll', () => {
-                chapterImages.forEach(img => {
-                    const rect = img.getBoundingClientRect();
-                    const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-                    
-                    if (isVisible) {
-                        const imgCenter = rect.top + rect.height / 2;
-                        const screenCenter = window.innerHeight / 2;
-                        const distanceFromCenter = imgCenter - screenCenter;
-                        const maxDistance = window.innerHeight / 2 + rect.height / 2;
-                        const ratio = Math.min(Math.max(distanceFromCenter / maxDistance, -1), 1);
-                        
-                        // Параллакс-эффект с учетом случайных параметров
-                        const rotateY = ratio * 5 * img.dataset.parallaxDirection * img.dataset.parallaxIntensity;
-                        const translateY = ratio * 30 * img.dataset.parallaxIntensity;
-                        const scale = 1 + Math.abs(ratio) * 0.05 * img.dataset.parallaxIntensity;
-                        
-                        img.style.transform = `perspective(1000px) rotateY(${rotateY}deg) translateY(${translateY}px) scale(${scale})`;
-                    }
-                });
-            });
-            
-            // Обработка клика для увеличения изображения
-            chapterImages.forEach(img => {
-                img.addEventListener('click', () => {
-                    zoomedImage.src = img.src;
-                    zoomOverlay.classList.add('active');
-                    setTimeout(() => {
-                        zoomedImage.classList.add('zoom-active');
-                    }, 10);
-                    
-                    // Отключаем скролл страницы при открытом увеличении
-                    document.body.style.overflow = 'hidden';
-                });
-            });
-            
-            // Закрытие увеличенного изображения
-            closeZoom.addEventListener('click', () => {
-                zoomedImage.classList.remove('zoom-active');
-                setTimeout(() => {
-                    zoomOverlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                }, 300);
-            });
-            
-            // Закрытие по клику на оверлей
-            zoomOverlay.addEventListener('click', (e) => {
-                if (e.target === zoomOverlay) {
-                    zoomedImage.classList.remove('zoom-active');
-                    setTimeout(() => {
-                        zoomOverlay.classList.remove('active');
-                        document.body.style.overflow = '';
-                    }, 300);
-                }
-            });
-        }
-
-        // Галерея изображений для глав
+        // Галерея изображений для глав (упрощённая версия без параллакса)
         function initChapterGalleries() {
             document.querySelectorAll('.chapter-image-container').forEach(container => {
                 const slider = container.querySelector('.chapter-image-slider');
@@ -1372,12 +1199,6 @@
                     currentIndex = index;
                     slider.style.transform = `translateX(-${currentIndex * 100}%)`;
                     updateCounter();
-                    
-                    images.forEach(img => {
-                        if (img.classList.contains('loaded')) {
-                            initChapterParallax();
-                        }
-                    });
                 }
                 
                 prevBtn.addEventListener('click', () => {
@@ -1432,16 +1253,6 @@
             audioPlayer.init();
             initFloatingSmiley();
             initChapterGalleries();
-            
-            const checkImagesLoaded = setInterval(() => {
-                const images = document.querySelectorAll('.chapter-image');
-                const loadedImages = document.querySelectorAll('.chapter-image.loaded');
-                
-                if (images.length > 0 && images.length === loadedImages.length) {
-                    clearInterval(checkImagesLoaded);
-                    initChapterParallax();
-                }
-            }, 500);
         });
     </script>
 </body>
