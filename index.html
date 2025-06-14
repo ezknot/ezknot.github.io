@@ -1199,7 +1199,7 @@
             });
         }
 
-        // Галерея изображений для глав с анимациями
+        // Галерея изображений для глав
         function initChapterGalleries() {
             document.querySelectorAll('.chapter-image-container').forEach(container => {
                 const slider = container.querySelector('.chapter-image-slider');
@@ -1210,7 +1210,6 @@
                 
                 let currentIndex = 0;
                 const totalImages = images.length;
-                let autoScrollInterval;
                 
                 function updateCounter() {
                     counter.textContent = `${currentIndex + 1}/${totalImages}`;
@@ -1239,17 +1238,6 @@
                     }
                 }
                 
-                function startAutoScroll() {
-                    // Очищаем предыдущий интервал, если он был
-                    if (autoScrollInterval) clearInterval(autoScrollInterval);
-                    
-                    // Устанавливаем новый интервал (8-15 секунд)
-                    const interval = 8000 + Math.random() * 7000;
-                    autoScrollInterval = setInterval(() => {
-                        nextImage();
-                    }, interval);
-                }
-                
                 function nextImage() {
                     currentIndex = (currentIndex + 1) % totalImages;
                     showImage(currentIndex);
@@ -1258,13 +1246,11 @@
                 prevBtn.addEventListener('click', () => {
                     currentIndex = (currentIndex - 1 + totalImages) % totalImages;
                     showImage(currentIndex);
-                    startAutoScroll(); // Перезапускаем автоскролл после ручного переключения
                 });
                 
                 nextBtn.addEventListener('click', () => {
                     currentIndex = (currentIndex + 1) % totalImages;
                     showImage(currentIndex);
-                    startAutoScroll(); // Перезапускаем автоскролл после ручного переключения
                 });
                 
                 let touchStartX = 0;
@@ -1283,11 +1269,9 @@
                     if (touchEndX < touchStartX - 50) {
                         currentIndex = (currentIndex + 1) % totalImages;
                         showImage(currentIndex);
-                        startAutoScroll(); // Перезапускаем автоскролл после свайпа
                     } else if (touchEndX > touchStartX + 50) {
                         currentIndex = (currentIndex - 1 + totalImages) % totalImages;
                         showImage(currentIndex);
-                        startAutoScroll(); // Перезапускаем автоскролл после свайпа
                     }
                 }
                 
@@ -1304,7 +1288,6 @@
                 // Инициализация
                 updateCounter();
                 showImage(0);
-                startAutoScroll();
             });
         }
 
