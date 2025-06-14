@@ -156,7 +156,8 @@
             object-fit: cover;
             filter: var(--image-filter);
             opacity: 0;
-            transition: opacity 0.8s ease;
+            transition: opacity 0.8s ease, transform 0.5s ease;
+            transform-origin: center center;
         }
         
         .chapter-image.loaded {
@@ -625,6 +626,25 @@
             }
             100% {
                 transform: translateX(-100px) translateY(0) rotate(360deg);
+            }
+        }
+
+        /* Анимация для изображений глав */
+        @keyframes subtlePulse {
+            0%, 100% {
+                transform: scale(1) rotate(0deg);
+            }
+            50% {
+                transform: scale(1.02) rotate(0.5deg);
+            }
+        }
+
+        @keyframes subtlePulseReverse {
+            0%, 100% {
+                transform: scale(1) rotate(0deg);
+            }
+            50% {
+                transform: scale(1.02) rotate(-0.5deg);
             }
         }
 
@@ -1179,7 +1199,7 @@
             });
         }
 
-        // Галерея изображений для глав (упрощённая версия без параллакса)
+        // Галерея изображений для глав с анимациями
         function initChapterGalleries() {
             document.querySelectorAll('.chapter-image-container').forEach(container => {
                 const slider = container.querySelector('.chapter-image-slider');
@@ -1190,6 +1210,7 @@
                 
                 let currentIndex = 0;
                 const totalImages = images.length;
+                let autoScrollInterval;
                 
                 function updateCounter() {
                     counter.textContent = `${currentIndex + 1}/${totalImages}`;
@@ -1199,16 +1220,51 @@
                     currentIndex = index;
                     slider.style.transform = `translateX(-${currentIndex * 100}%)`;
                     updateCounter();
+                    
+                    // Удаляем предыдущие анимации
+                    images.forEach(img => {
+                        img.style.animation = 'none';
+                        void img.offsetWidth; // Триггер рефлоу
+                    });
+                    
+                    // Добавляем анимацию к текущему изображению
+                    const currentImg = images[currentIndex];
+                    if (currentImg) {
+                        // Случайный выбор анимации
+                        const animationType = Math.random() > 0.5 ? 'subtlePulse' : 'subtlePulseReverse';
+                        const duration = 5 + Math.random() * 10; // 5-15 секунд
+                        const delay = Math.random() * 5; // Задержка 0-5 секунд
+                        
+                        currentImg.style.animation = `${animationType} ${duration}s ease-in-out ${delay}s infinite`;
+                    }
+                }
+                
+                function startAutoScroll() {
+                    // Очищаем предыдущий интервал, если он был
+                    if (autoScrollInterval) clearInterval(autoScrollInterval);
+                    
+                    // Устанавливаем новый интервал (8-15 секунд)
+                    const interval = 8000 + Math.random() * 7000;
+                    autoScrollInterval = setInterval(() => {
+                        nextImage();
+                    }, interval);
+                }
+                
+                function nextImage() {
+                    currentIndex = (currentIndex + 1) % totalImages;
+                    showImage(currentIndex);
                 }
                 
                 prevBtn.addEventListener('click', () => {
                     currentIndex = (currentIndex - 1 + totalImages) % totalImages;
                     showImage(currentIndex);
+                    startAutoScroll(); // Перезапускаем автоскролл после ручного переключения
                 });
                 
                 nextBtn.addEventListener('click', () => {
                     currentIndex = (currentIndex + 1) % totalImages;
                     showImage(currentIndex);
+                    startAutoScroll(); // Перезапускаем автоскролл после ручного переключения
                 });
                 
                 let touchStartX = 0;
@@ -1227,9 +1283,11 @@
                     if (touchEndX < touchStartX - 50) {
                         currentIndex = (currentIndex + 1) % totalImages;
                         showImage(currentIndex);
+                        startAutoScroll(); // Перезапускаем автоскролл после свайпа
                     } else if (touchEndX > touchStartX + 50) {
                         currentIndex = (currentIndex - 1 + totalImages) % totalImages;
                         showImage(currentIndex);
+                        startAutoScroll(); // Перезапускаем автоскролл после свайпа
                     }
                 }
                 
@@ -1243,7 +1301,10 @@
                     nextBtn.style.opacity = '0.7';
                 });
                 
+                // Инициализация
                 updateCounter();
+                showImage(0);
+                startAutoScroll();
             });
         }
 
