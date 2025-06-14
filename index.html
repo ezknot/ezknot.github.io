@@ -15,7 +15,7 @@
             --accent: #7f5af0;
             --accent-light: #9370ff;
             --border: #333;
-            --image-filter: brightness(0.8) contrast(1.2);
+            --image-filter: brightness(0.8) contrast(1.2) saturate(0.9) sepia(0.1);
             --current-font: 'Noto Serif', serif;
         }
 
@@ -27,7 +27,7 @@
             --accent: #6a5acd;
             --accent-light: #7b68ee;
             --border: #ddd;
-            --image-filter: none;
+            --image-filter: brightness(1.05) contrast(1.05) saturate(1.1) sepia(0.05);
         }
         
         body {
@@ -677,6 +677,12 @@
             50% {
                 transform: scale(1.02) rotate(-0.5deg);
             }
+        }
+
+        /* Унифицированный фильтр для всех изображений */
+        img:not(.chapter-image) {
+            filter: var(--image-filter);
+            transition: filter 0.5s ease;
         }
 
         @media (max-width: 768px) {
