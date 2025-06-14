@@ -213,8 +213,6 @@
             opacity: 0.7;
         }
         
-        .chapter:hover { transform: translateX(5px); }
-        
         .first-letter {
             font-size: 2.8rem;
             float: left;
@@ -643,7 +641,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: rgba(0, 0, 0, 0.95);
             z-index: 1000;
             display: flex;
             justify-content: center;
@@ -659,15 +657,16 @@
         }
 
         .zoomed-image {
-            max-width: 90%;
-            max-height: 90%;
+            max-width: 95%;
+            max-height: 95%;
             object-fit: contain;
-            transform: scale(0.95);
+            transform: scale(0.9);
             transition: transform 0.3s ease;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
         }
 
         .zoomed-image.zoom-active {
-            transform: scale(1);
+            transform: scale(1.1);
         }
 
         .close-zoom {
@@ -680,6 +679,12 @@
             background: none;
             border: none;
             z-index: 1001;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .close-zoom:hover {
+            opacity: 1;
         }
 
         @media (max-width: 768px) {
@@ -717,6 +722,11 @@
             .floating-smiley {
                 font-size: 1.5rem;
             }
+
+            .zoomed-image {
+                max-width: 98%;
+                max-height: 98%;
+            }
         }
 
         @media (max-width: 480px) {
@@ -752,6 +762,14 @@
             
             .floating-smiley {
                 font-size: 1.2rem;
+            }
+
+            .zoomed-image {
+                transform: scale(0.95);
+            }
+            
+            .zoomed-image.zoom-active {
+                transform: scale(1);
             }
         }
     </style>
@@ -1254,6 +1272,29 @@
                 img.dataset.parallaxIntensity = (Math.random() * 1 + 0.5).toFixed(2);
             });
             
+            // Отслеживаем видимость глав для сдвига
+            const chapters = document.querySelectorAll('.chapter');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Если видно больше 50% главы
+                        if (entry.intersectionRatio > 0.5) {
+                            entry.target.style.transform = 'translateX(5px)';
+                        } else {
+                            entry.target.style.transform = 'translateX(0)';
+                        }
+                    } else {
+                        entry.target.style.transform = 'translateX(0)';
+                    }
+                });
+            }, {
+                threshold: [0, 0.5, 1]
+            });
+
+            chapters.forEach(chapter => {
+                observer.observe(chapter);
+            });
+            
             window.addEventListener('scroll', () => {
                 chapterImages.forEach(img => {
                     const rect = img.getBoundingClientRect();
@@ -1284,6 +1325,9 @@
                     setTimeout(() => {
                         zoomedImage.classList.add('zoom-active');
                     }, 10);
+                    
+                    // Отключаем скролл страницы при открытом увеличении
+                    document.body.style.overflow = 'hidden';
                 });
             });
             
@@ -1292,6 +1336,7 @@
                 zoomedImage.classList.remove('zoom-active');
                 setTimeout(() => {
                     zoomOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
                 }, 300);
             });
             
@@ -1301,6 +1346,7 @@
                     zoomedImage.classList.remove('zoom-active');
                     setTimeout(() => {
                         zoomOverlay.classList.remove('active');
+                        document.body.style.overflow = '';
                     }, 300);
                 }
             });
