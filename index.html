@@ -87,6 +87,17 @@
             font-weight: 700;
             letter-spacing: 0.5px;
             position: relative;
+            text-shadow: 0 0 8px rgba(127, 90, 240, 0.3);
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 4px rgba(127, 90, 240, 0.2), 0 0 8px rgba(127, 90, 240, 0.1);
+            }
+            to {
+                text-shadow: 0 0 8px rgba(127, 90, 240, 0.3), 0 0 16px rgba(127, 90, 240, 0.2);
+            }
         }
         
         .title-frame h1::before {
@@ -131,23 +142,6 @@
         .chapter {
             margin-bottom: 2.5rem;
             position: relative;
-        }
-
-        .chapter::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            border-radius: 12px;
-            background: radial-gradient(
-                ellipse at center,
-                rgba(127, 90, 240, 0.08) 0%,
-                rgba(127, 90, 240, 0) 70%
-            );
-            pointer-events: none;
-            z-index: -1;
         }
 
         .chapter-image-container {
@@ -243,9 +237,10 @@
             border-left: 3px solid var(--accent);
             padding: 1rem;
             margin: 1.5rem 0;
-            background-color: rgba(127, 90, 240, 0.05);
+            background-color: rgba(127, 90, 240, 0.08);
             border-radius: 0 4px 4px 0;
             position: relative;
+            box-shadow: 0 0 15px rgba(127, 90, 240, 0.15);
         }
         
         .quote::before {
@@ -258,7 +253,7 @@
             border-radius: 0 4px 4px 0;
             background: radial-gradient(
                 ellipse at center,
-                rgba(127, 90, 240, 0.08) 0%,
+                rgba(127, 90, 240, 0.15) 0%,
                 rgba(127, 90, 240, 0) 70%
             );
             pointer-events: none;
