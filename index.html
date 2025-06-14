@@ -9,7 +9,7 @@
     <style>
         :root {
             --bg-dark: #121212;
-            --bg-card: rgba(30, 30, 30, 0.8); /* Прозрачность добавлена */
+            --bg-card: rgba(30, 30, 30, 0.8);
             --text-primary: #e0e0e0;
             --text-secondary: #b0b0b0;
             --accent: #7f5af0;
@@ -21,7 +21,7 @@
 
         [data-theme="light"] {
             --bg-dark: #f5f5f5;
-            --bg-card: rgba(255, 255, 255, 0.8); /* Прозрачность добавлена */
+            --bg-card: rgba(255, 255, 255, 0.8);
             --text-primary: #333333;
             --text-secondary: #666666;
             --accent: #6a5acd;
@@ -40,6 +40,7 @@
             min-height: 100vh;
             transition: background-color 0.5s ease, color 0.5s ease;
             text-rendering: optimizeLegibility;
+            overflow-x: hidden;
         }
         
         .book-container, .book-frame {
@@ -55,7 +56,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             border: 1px solid var(--border);
             transition: all 0.5s ease;
-            backdrop-filter: blur(5px); /* Добавляем размытие для эффекта прозрачности */
+            backdrop-filter: blur(5px);
         }
         
         .title-frame {
@@ -140,14 +141,14 @@
             overflow: hidden;
             border-radius: 6px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            background: transparent; /* Прозрачный фон */
+            background: transparent;
             perspective: 1000px;
         }
 
         .chapter-image-slider {
             display: flex;
             height: 100%;
-            transition: transform 1s ease; /* Увеличена скорость анимации */
+            transition: transform 1s ease;
         }
 
         .chapter-image {
@@ -157,9 +158,11 @@
             object-fit: cover;
             filter: var(--image-filter);
             opacity: 0;
-            transition: opacity 0.8s ease, transform 0.8s ease; /* Увеличено время анимации */
+            transition: opacity 0.8s ease, transform 0.8s ease;
             transform-style: preserve-3d;
-            background: transparent; /* Прозрачный фон */
+            background: transparent;
+            transform-origin: center center;
+            will-change: transform;
         }
         
         .chapter-image.loaded {
@@ -181,7 +184,7 @@
             font-size: 2rem;
             text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
             z-index: 2;
-            opacity: 0.7; /* Добавлена прозрачность */
+            opacity: 0.7;
         }
 
         .image-nav:hover {
@@ -207,7 +210,7 @@
             border-radius: 10px;
             font-size: 0.8rem;
             z-index: 2;
-            opacity: 0.7; /* Добавлена прозрачность */
+            opacity: 0.7;
         }
         
         .chapter:hover { transform: translateX(5px); }
@@ -278,9 +281,8 @@
             background: var(--accent-light);
         }
 
-        /* Стили для кнопки выбора шрифта */
         .font-btn {
-            background: rgba(42, 42, 42, 0.8); /* Прозрачность добавлена */
+            background: rgba(42, 42, 42, 0.8);
             color: var(--accent-light);
             border: none;
             width: 40px;
@@ -295,22 +297,21 @@
             font-size: 18px;
             border: 1px solid var(--border);
             position: fixed;
-            left: 20px; /* Перемещено влево */
+            left: 20px;
             bottom: 20px;
             z-index: 100;
         }
 
         .font-btn:hover {
             transform: scale(1.1);
-            background: rgba(51, 51, 51, 0.8); /* Прозрачность добавлена */
+            background: rgba(51, 51, 51, 0.8);
             color: var(--accent-light);
         }
 
-        /* Панель выбора шрифтов */
         .font-panel {
             position: fixed;
             bottom: 80px;
-            left: 20px; /* Перемещено влево */
+            left: 20px;
             background: var(--bg-card);
             padding: 15px;
             border-radius: 10px;
@@ -321,7 +322,7 @@
             gap: 10px;
             z-index: 99;
             width: 200px;
-            backdrop-filter: blur(5px); /* Добавляем размытие для эффекта прозрачности */
+            backdrop-filter: blur(5px);
         }
 
         .font-panel.show { display: flex; }
@@ -357,7 +358,7 @@
             gap: 10px;
             z-index: 99;
             width: 200px;
-            backdrop-filter: blur(5px); /* Добавляем размытие для эффекта прозрачности */
+            backdrop-filter: blur(5px);
         }
 
         .audio-panel.show { display: flex; }
@@ -457,7 +458,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             border: 1px solid var(--border);
             box-sizing: border-box;
-            backdrop-filter: blur(5px); /* Добавляем размытие для эффекта прозрачности */
+            backdrop-filter: blur(5px);
         }
 
         .audio-controls {
@@ -532,7 +533,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             border: 1px solid var(--border);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            backdrop-filter: blur(5px); /* Добавляем размытие для эффекта прозрачности */
+            backdrop-filter: blur(5px);
         }
 
         .story-card:hover {
@@ -635,6 +636,52 @@
             }
         }
 
+        /* Стили для увеличенного изображения */
+        .image-zoom-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-zoom-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .zoomed-image {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .zoomed-image.zoom-active {
+            transform: scale(1);
+        }
+
+        .close-zoom {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 1001;
+        }
+
         @media (max-width: 768px) {
             .book-container, .book-frame { padding: 1rem; }
             h1 { font-size: 1.8rem; }
@@ -712,6 +759,12 @@
 <body>
     <!-- Анимированный смайл -->
     <div class="floating-smiley" id="floatingSmiley">༼ﾉຈل͜ຈ༽ﾉ𓍊𓋼</div>
+
+    <!-- Оверлей для увеличенного изображения -->
+    <div class="image-zoom-overlay" id="imageZoomOverlay">
+        <button class="close-zoom" id="closeZoom">&times;</button>
+        <img src="" alt="Увеличенное изображение" class="zoomed-image" id="zoomedImage">
+    </div>
 
     <div class="controls">
         <button class="control-btn" id="themeToggle">☀︎</button>
@@ -1162,26 +1215,23 @@
         // Анимированный смайл (одноразовый)
         function initFloatingSmiley() {
             const smiley = document.getElementById('floatingSmiley');
-            let wasShown = false; // Флаг, что анимация уже была показана
+            let wasShown = false;
             
-            // Показываем смайл при прокрутке к середине страницы
             window.addEventListener('scroll', () => {
-                if (wasShown) return; // Если уже показывали, больше не показываем
+                if (wasShown) return;
                 
                 const scrollPosition = window.scrollY;
                 const windowHeight = window.innerHeight;
                 const documentHeight = document.documentElement.scrollHeight;
                 const middlePosition = documentHeight / 2 - windowHeight / 2;
                 
-                // Если пользователь прокрутил до середины страницы
                 if (scrollPosition >= middlePosition - 200) {
-                    wasShown = true; // Помечаем, что уже показали
+                    wasShown = true;
                     smiley.style.opacity = '1';
                     smiley.style.left = '-100px';
                     smiley.style.top = `${windowHeight / 2}px`;
-                    smiley.style.animation = 'floatAndRotate 8s linear forwards'; // Анимация только один раз
+                    smiley.style.animation = 'floatAndRotate 8s linear forwards';
                     
-                    // Через 8 секунд скрываем смайл (время анимации)
                     setTimeout(() => {
                         smiley.style.opacity = '0';
                     }, 8000);
@@ -1189,9 +1239,20 @@
             });
         }
 
-        // Параллакс-эффект для изображений глав
+        // Параллакс-эффект для изображений глав с увеличением
         function initChapterParallax() {
             const chapterImages = document.querySelectorAll('.chapter-image.loaded');
+            const zoomOverlay = document.getElementById('imageZoomOverlay');
+            const zoomedImage = document.getElementById('zoomedImage');
+            const closeZoom = document.getElementById('closeZoom');
+            
+            // Генерируем случайные параметры параллакса для каждого изображения
+            chapterImages.forEach(img => {
+                // Случайное направление (-1 или 1)
+                img.dataset.parallaxDirection = Math.random() > 0.5 ? 1 : -1;
+                // Случайная интенсивность (от 0.5 до 1.5)
+                img.dataset.parallaxIntensity = (Math.random() * 1 + 0.5).toFixed(2);
+            });
             
             window.addEventListener('scroll', () => {
                 chapterImages.forEach(img => {
@@ -1199,23 +1260,49 @@
                     const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
                     
                     if (isVisible) {
-                        // Рассчитываем степень параллакса в зависимости от положения на экране
                         const imgCenter = rect.top + rect.height / 2;
                         const screenCenter = window.innerHeight / 2;
                         const distanceFromCenter = imgCenter - screenCenter;
                         const maxDistance = window.innerHeight / 2 + rect.height / 2;
                         const ratio = Math.min(Math.max(distanceFromCenter / maxDistance, -1), 1);
                         
-                        // Параллакс-эффект с плавным наклоном
-                        const rotateY = ratio * 5; // Увеличил угол наклона до 5 градусов
-                        const translateY = ratio * 30; // Увеличил смещение до 30px
+                        // Параллакс-эффект с учетом случайных параметров
+                        const rotateY = ratio * 5 * img.dataset.parallaxDirection * img.dataset.parallaxIntensity;
+                        const translateY = ratio * 30 * img.dataset.parallaxIntensity;
+                        const scale = 1 + Math.abs(ratio) * 0.05 * img.dataset.parallaxIntensity;
                         
-                        // Добавляем случайное направление (случайный знак для rotateY)
-                        const randomDirection = Math.random() > 0.5 ? 1 : -1;
-                        
-                        img.style.transform = `perspective(1000px) rotateY(${rotateY * randomDirection}deg) translateY(${translateY}px)`;
+                        img.style.transform = `perspective(1000px) rotateY(${rotateY}deg) translateY(${translateY}px) scale(${scale})`;
                     }
                 });
+            });
+            
+            // Обработка клика для увеличения изображения
+            chapterImages.forEach(img => {
+                img.addEventListener('click', () => {
+                    zoomedImage.src = img.src;
+                    zoomOverlay.classList.add('active');
+                    setTimeout(() => {
+                        zoomedImage.classList.add('zoom-active');
+                    }, 10);
+                });
+            });
+            
+            // Закрытие увеличенного изображения
+            closeZoom.addEventListener('click', () => {
+                zoomedImage.classList.remove('zoom-active');
+                setTimeout(() => {
+                    zoomOverlay.classList.remove('active');
+                }, 300);
+            });
+            
+            // Закрытие по клику на оверлей
+            zoomOverlay.addEventListener('click', (e) => {
+                if (e.target === zoomOverlay) {
+                    zoomedImage.classList.remove('zoom-active');
+                    setTimeout(() => {
+                        zoomOverlay.classList.remove('active');
+                    }, 300);
+                }
             });
         }
 
@@ -1231,18 +1318,15 @@
                 let currentIndex = 0;
                 const totalImages = images.length;
                 
-                // Обновляем счетчик
                 function updateCounter() {
                     counter.textContent = `${currentIndex + 1}/${totalImages}`;
                 }
                 
-                // Показываем текущее изображение
                 function showImage(index) {
                     currentIndex = index;
                     slider.style.transform = `translateX(-${currentIndex * 100}%)`;
                     updateCounter();
                     
-                    // После загрузки изображения инициализируем параллакс
                     images.forEach(img => {
                         if (img.classList.contains('loaded')) {
                             initChapterParallax();
@@ -1250,19 +1334,16 @@
                     });
                 }
                 
-                // Переключение на предыдущее изображение
                 prevBtn.addEventListener('click', () => {
                     currentIndex = (currentIndex - 1 + totalImages) % totalImages;
                     showImage(currentIndex);
                 });
                 
-                // Переключение на следующее изображение
                 nextBtn.addEventListener('click', () => {
                     currentIndex = (currentIndex + 1) % totalImages;
                     showImage(currentIndex);
                 });
                 
-                // Обработка свайпов на мобильных устройствах
                 let touchStartX = 0;
                 let touchEndX = 0;
                 
@@ -1277,17 +1358,14 @@
                 
                 function handleSwipe() {
                     if (touchEndX < touchStartX - 50) {
-                        // Свайп влево - следующее изображение
                         currentIndex = (currentIndex + 1) % totalImages;
                         showImage(currentIndex);
                     } else if (touchEndX > touchStartX + 50) {
-                        // Свайп вправо - предыдущее изображение
                         currentIndex = (currentIndex - 1 + totalImages) % totalImages;
                         showImage(currentIndex);
                     }
                 }
                 
-                // Показываем кнопки навигации при наведении
                 container.addEventListener('mouseenter', () => {
                     prevBtn.style.opacity = '0.7';
                     nextBtn.style.opacity = '0.7';
@@ -1298,7 +1376,6 @@
                     nextBtn.style.opacity = '0.7';
                 });
                 
-                // Инициализация
                 updateCounter();
             });
         }
@@ -1310,7 +1387,6 @@
             initFloatingSmiley();
             initChapterGalleries();
             
-            // Инициализация параллакса после загрузки всех изображений
             const checkImagesLoaded = setInterval(() => {
                 const images = document.querySelectorAll('.chapter-image');
                 const loadedImages = document.querySelectorAll('.chapter-image.loaded');
