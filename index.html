@@ -9,7 +9,7 @@
     <style>
         :root {
             --bg-dark: #121212;
-            --bg-card: #1e1e1e;
+            --bg-card: rgba(30, 30, 30, 0.8); /* Прозрачность добавлена */
             --text-primary: #e0e0e0;
             --text-secondary: #b0b0b0;
             --accent: #7f5af0;
@@ -21,7 +21,7 @@
 
         [data-theme="light"] {
             --bg-dark: #f5f5f5;
-            --bg-card: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.8); /* Прозрачность добавлена */
             --text-primary: #333333;
             --text-secondary: #666666;
             --accent: #6a5acd;
@@ -55,6 +55,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             border: 1px solid var(--border);
             transition: all 0.5s ease;
+            backdrop-filter: blur(5px); /* Добавляем размытие для эффекта прозрачности */
         }
         
         .title-frame {
@@ -139,14 +140,14 @@
             overflow: hidden;
             border-radius: 6px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            background: #2a2a2a;
+            background: transparent; /* Прозрачный фон */
             perspective: 1000px;
         }
 
         .chapter-image-slider {
             display: flex;
             height: 100%;
-            transition: transform 0.5s ease;
+            transition: transform 1s ease; /* Увеличена скорость анимации */
         }
 
         .chapter-image {
@@ -156,8 +157,9 @@
             object-fit: cover;
             filter: var(--image-filter);
             opacity: 0;
-            transition: opacity 0.5s ease, transform 0.5s ease;
+            transition: opacity 0.8s ease, transform 0.8s ease; /* Увеличено время анимации */
             transform-style: preserve-3d;
+            background: transparent; /* Прозрачный фон */
         }
         
         .chapter-image.loaded {
@@ -171,7 +173,7 @@
             width: 30%;
             cursor: pointer;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.5s ease;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -179,6 +181,7 @@
             font-size: 2rem;
             text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
             z-index: 2;
+            opacity: 0.7; /* Добавлена прозрачность */
         }
 
         .image-nav:hover {
@@ -204,6 +207,7 @@
             border-radius: 10px;
             font-size: 0.8rem;
             z-index: 2;
+            opacity: 0.7; /* Добавлена прозрачность */
         }
         
         .chapter:hover { transform: translateX(5px); }
@@ -276,7 +280,7 @@
 
         /* Стили для кнопки выбора шрифта */
         .font-btn {
-            background: #2a2a2a;
+            background: rgba(42, 42, 42, 0.8); /* Прозрачность добавлена */
             color: var(--accent-light);
             border: none;
             width: 40px;
@@ -290,11 +294,15 @@
             transition: all 0.3s ease;
             font-size: 18px;
             border: 1px solid var(--border);
+            position: fixed;
+            left: 20px; /* Перемещено влево */
+            bottom: 20px;
+            z-index: 100;
         }
 
         .font-btn:hover {
             transform: scale(1.1);
-            background: #333;
+            background: rgba(51, 51, 51, 0.8); /* Прозрачность добавлена */
             color: var(--accent-light);
         }
 
@@ -302,7 +310,7 @@
         .font-panel {
             position: fixed;
             bottom: 80px;
-            right: 20px;
+            left: 20px; /* Перемещено влево */
             background: var(--bg-card);
             padding: 15px;
             border-radius: 10px;
@@ -313,6 +321,7 @@
             gap: 10px;
             z-index: 99;
             width: 200px;
+            backdrop-filter: blur(5px); /* Добавляем размытие для эффекта прозрачности */
         }
 
         .font-panel.show { display: flex; }
@@ -348,6 +357,7 @@
             gap: 10px;
             z-index: 99;
             width: 200px;
+            backdrop-filter: blur(5px); /* Добавляем размытие для эффекта прозрачности */
         }
 
         .audio-panel.show { display: flex; }
@@ -447,6 +457,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             border: 1px solid var(--border);
             box-sizing: border-box;
+            backdrop-filter: blur(5px); /* Добавляем размытие для эффекта прозрачности */
         }
 
         .audio-controls {
@@ -521,6 +532,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             border: 1px solid var(--border);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(5px); /* Добавляем размытие для эффекта прозрачности */
         }
 
         .story-card:hover {
@@ -629,9 +641,11 @@
             h2 { font-size: 1.4rem; margin-top: 2rem; }
             p { font-size: 1rem; line-height: 1.5; }
             .controls { bottom: 15px; right: 15px; }
+            .font-btn { left: 15px; bottom: 15px; }
             .audio-panel, .font-panel { 
                 bottom: 70px; 
                 right: 15px; 
+                left: 15px;
                 width: calc(100% - 30px); 
                 max-width: 200px; 
             }
@@ -702,8 +716,10 @@
     <div class="controls">
         <button class="control-btn" id="themeToggle">☀︎</button>
         <button class="control-btn" id="audioToggle">♫</button>
-        <button class="font-btn" id="fontToggle">𝓕</button>
     </div>
+
+    <!-- Кнопка выбора шрифта теперь слева -->
+    <button class="font-btn" id="fontToggle">𝓕</button>
 
     <div class="audio-panel" id="audioPanel">
         <div class="audio-option" data-sound="Sound/ambient1.ogg">📻 Ambient Radio №1</div>
@@ -1191,10 +1207,13 @@
                         const ratio = Math.min(Math.max(distanceFromCenter / maxDistance, -1), 1);
                         
                         // Параллакс-эффект с плавным наклоном
-                        const rotateY = ratio * 3; // Максимальный угол наклона 3 градуса
-                        const translateY = ratio * 20; // Максимальное смещение 20px
+                        const rotateY = ratio * 5; // Увеличил угол наклона до 5 градусов
+                        const translateY = ratio * 30; // Увеличил смещение до 30px
                         
-                        img.style.transform = `perspective(1000px) rotateY(${rotateY}deg) translateY(${translateY}px)`;
+                        // Добавляем случайное направление (случайный знак для rotateY)
+                        const randomDirection = Math.random() > 0.5 ? 1 : -1;
+                        
+                        img.style.transform = `perspective(1000px) rotateY(${rotateY * randomDirection}deg) translateY(${translateY}px)`;
                     }
                 });
             });
@@ -1270,13 +1289,13 @@
                 
                 // Показываем кнопки навигации при наведении
                 container.addEventListener('mouseenter', () => {
-                    prevBtn.style.opacity = '0.5';
-                    nextBtn.style.opacity = '0.5';
+                    prevBtn.style.opacity = '0.7';
+                    nextBtn.style.opacity = '0.7';
                 });
                 
                 container.addEventListener('mouseleave', () => {
-                    prevBtn.style.opacity = '0';
-                    nextBtn.style.opacity = '0';
+                    prevBtn.style.opacity = '0.7';
+                    nextBtn.style.opacity = '0.7';
                 });
                 
                 // Инициализация
