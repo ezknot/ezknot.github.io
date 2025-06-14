@@ -140,6 +140,7 @@
             border-radius: 6px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             background: #2a2a2a;
+            perspective: 1000px;
         }
 
         .chapter-image-slider {
@@ -155,7 +156,8 @@
             object-fit: cover;
             filter: var(--image-filter);
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            transform-style: preserve-3d;
         }
         
         .chapter-image.loaded {
@@ -497,7 +499,7 @@
         .audio-progress-filled {
             position: absolute;
             top: 0;
-            left: 0,
+            left: 0;
             height: 100%;
             background-color: var(--accent);
             border-radius: 5px;
@@ -574,8 +576,8 @@
 
         .story-tags {
             margin-top: 15px;
-            display: flex,
-            flex-wrap: wrap,
+            display: flex;
+            flex-wrap: wrap;
             gap: 8px;
         }
 
@@ -1173,35 +1175,26 @@
 
         // Параллакс-эффект для изображений глав
         function initChapterParallax() {
-            const chapterImages = document.querySelectorAll('.chapter-image');
-            let lastScrollPosition = window.scrollY;
-            let isScrollingDown = false;
+            const chapterImages = document.querySelectorAll('.chapter-image.loaded');
             
             window.addEventListener('scroll', () => {
-                const currentScrollPosition = window.scrollY;
-                isScrollingDown = currentScrollPosition > lastScrollPosition;
-                lastScrollPosition = currentScrollPosition;
-                
                 chapterImages.forEach(img => {
                     const rect = img.getBoundingClientRect();
                     const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
                     
                     if (isVisible) {
-                        // Рассчитываем степень наклона в зависимости от положения на экране
+                        // Рассчитываем степень параллакса в зависимости от положения на экране
                         const imgCenter = rect.top + rect.height / 2;
                         const screenCenter = window.innerHeight / 2;
                         const distanceFromCenter = imgCenter - screenCenter;
                         const maxDistance = window.innerHeight / 2 + rect.height / 2;
                         const ratio = Math.min(Math.max(distanceFromCenter / maxDistance, -1), 1);
                         
-                        if (isScrollingDown) {
-                            // При прокрутке вниз - наклон вправо
-                            const rotate = ratio * 8; // Максимальный угол наклона 5 градусов
-                            img.style.transform = `perspective(1000px) rotateX(${rotate}deg) rotateY(${rotate}deg)`;
-                        } else {
-                            // При прокрутке вверх - возвращаем в исходное положение
-                            img.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
-                        }
+                        // Параллакс-эффект с плавным наклоном
+                        const rotateY = ratio * 3; // Максимальный угол наклона 3 градуса
+                        const translateY = ratio * 20; // Максимальное смещение 20px
+                        
+                        img.style.transform = `perspective(1000px) rotateY(${rotateY}deg) translateY(${translateY}px)`;
                     }
                 });
             });
@@ -1229,6 +1222,13 @@
                     currentIndex = index;
                     slider.style.transform = `translateX(-${currentIndex * 100}%)`;
                     updateCounter();
+                    
+                    // После загрузки изображения инициализируем параллакс
+                    images.forEach(img => {
+                        if (img.classList.contains('loaded')) {
+                            initChapterParallax();
+                        }
+                    });
                 }
                 
                 // Переключение на предыдущее изображение
@@ -1289,8 +1289,18 @@
             lazyLoadImages();
             audioPlayer.init();
             initFloatingSmiley();
-            initChapterParallax();
             initChapterGalleries();
+            
+            // Инициализация параллакса после загрузки всех изображений
+            const checkImagesLoaded = setInterval(() => {
+                const images = document.querySelectorAll('.chapter-image');
+                const loadedImages = document.querySelectorAll('.chapter-image.loaded');
+                
+                if (images.length > 0 && images.length === loadedImages.length) {
+                    clearInterval(checkImagesLoaded);
+                    initChapterParallax();
+                }
+            }, 500);
         });
     </script>
 </body>
