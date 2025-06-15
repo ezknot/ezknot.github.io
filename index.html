@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Бобруйск-Кассиопея | ༼ﾉຈل͜ຈ༽ﾉ𓍊𓋼</title>
+    <!-- Предзагрузка критических ресурсов -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Playfair+Display:wght@400;700&family=Flow+Circular&display=swap" as="style">
+    <link rel="preload" href="images/gl1-1.webp" as="image">
+    <link rel="preload" href="images/gl2-1.webp" as="image">
+    <link rel="preload" href="images/gl3.webp" as="image">
+    
     <!-- Подключаем шрифты -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Playfair+Display:wght@400;700&family=Flow+Circular&display=swap" rel="stylesheet">
     <style>
@@ -38,7 +44,7 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
-            transition: background-color 0.5s ease, color 0.5s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
             text-rendering: optimizeLegibility;
             overflow-x: hidden;
         }
@@ -46,7 +52,7 @@
         .book-container, .book-frame {
             max-width: 800px;
             margin: 0 auto;
-            animation: fadeIn 0.8s ease-out;
+            animation: fadeIn 0.5s ease-out;
             padding: 2rem;
         }
         
@@ -55,7 +61,7 @@
             border-radius: 8px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             border: 1px solid var(--border);
-            transition: all 0.5s ease;
+            transition: all 0.3s ease;
             backdrop-filter: blur(5px);
         }
         
@@ -158,7 +164,7 @@
         .chapter-image-slider {
             display: flex;
             height: 100%;
-            transition: transform 1s ease;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .chapter-image {
@@ -168,8 +174,9 @@
             object-fit: cover;
             filter: var(--image-filter);
             opacity: 0;
-            transition: opacity 0.8s ease, transform 0.5s ease;
+            transition: opacity 0.5s ease;
             transform-origin: center center;
+            will-change: transform, opacity;
         }
         
         .chapter-image.loaded {
@@ -183,7 +190,7 @@
             width: 30%;
             cursor: pointer;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -403,7 +410,7 @@
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
@@ -449,7 +456,7 @@
             background-color: var(--accent-light);
         }
 
-        .tab-content { display: none; animation: fadeIn 0.5s ease; }
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
         .tab-content.active { display: block; }
 
         .review {
@@ -561,8 +568,8 @@
         }
 
         .story-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
 
         .story-header {
@@ -587,7 +594,7 @@
         .story-full {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.5s ease, opacity 0.3s ease;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
             opacity: 0;
             margin-top: 15px;
         }
@@ -631,58 +638,20 @@
             background-color: rgba(127, 90, 240, 0.2);
         }
 
-        /* Стили для анимированного смайла */
-        .floating-smiley {
-            position: fixed;
-            font-size: 2rem;
-            z-index: 9999;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
-            transform-origin: center;
-        }
-
-        @keyframes floatAndRotate {
-            0% {
-                transform: translateX(-100px) translateY(0) rotate(0deg);
-            }
-            25% {
-                transform: translateX(calc(100vw - 100px)) translateY(-50px) rotate(90deg);
-            }
-            50% {
-                transform: translateX(calc(100vw - 100px)) translateY(50px) rotate(180deg);
-            }
-            75% {
-                transform: translateX(-100px) translateY(50px) rotate(270deg);
-            }
-            100% {
-                transform: translateX(-100px) translateY(0) rotate(360deg);
-            }
-        }
-
         /* Анимация для изображений глав */
         @keyframes subtlePulse {
             0%, 100% {
-                transform: scale(1) rotate(0deg);
+                transform: scale(1);
             }
             50% {
-                transform: scale(1.02) rotate(0.5deg);
-            }
-        }
-
-        @keyframes subtlePulseReverse {
-            0%, 100% {
-                transform: scale(1) rotate(0deg);
-            }
-            50% {
-                transform: scale(1.02) rotate(-0.5deg);
+                transform: scale(1.01);
             }
         }
 
         /* Унифицированный фильтр для всех изображений */
         img:not(.chapter-image) {
             filter: var(--image-filter);
-            transition: filter 0.5s ease;
+            transition: filter 0.3s ease;
         }
 
         @media (max-width: 768px) {
@@ -716,10 +685,6 @@
             .title-frame::before, .title-frame::after {
                 content: "";
             }
-            
-            .floating-smiley {
-                font-size: 1.5rem;
-            }
         }
 
         @media (max-width: 480px) {
@@ -752,17 +717,10 @@
                 width: 42px;
                 height: 42px;
             }
-            
-            .floating-smiley {
-                font-size: 1.2rem;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Анимированный смайл -->
-    <div class="floating-smiley" id="floatingSmiley">༼ﾉຈل͜ຈ༽ﾉ𓍊𓋼</div>
-
     <div class="controls">
         <button class="control-btn" id="themeToggle">☀︎</button>
         <button class="control-btn" id="audioToggle">♫</button>
@@ -807,8 +765,8 @@
                             <img data-src="images/gl1-2.webp" class="chapter-image" alt="Дополнительное изображение 1" loading="lazy">
                             <img data-src="images/gl1-3.webp" class="chapter-image" alt="Дополнительное изображение 2" loading="lazy">
                         </div>
-                        <div class="image-nav prev">·</div>
-                        <div class="image-nav next">·</div>
+                        <div class="image-nav prev">‹</div>
+                        <div class="image-nav next">›</div>
                         <div class="image-counter">1/3</div>
                     </div>
                     <p><span class="first-letter">Т</span>ьма сгущалась над городом, поглощая последние лучи заката. В этом предисловии я хочу провести вас через те мысли и переживания, которые легли в основу этой истории. Это не просто книга — это путешествие в глубины человеческой души.</p>
@@ -1209,33 +1167,6 @@
             }, 300);
         }
 
-        // Анимированный смайл (одноразовый)
-        function initFloatingSmiley() {
-            const smiley = document.getElementById('floatingSmiley');
-            let wasShown = false;
-            
-            window.addEventListener('scroll', () => {
-                if (wasShown) return;
-                
-                const scrollPosition = window.scrollY;
-                const windowHeight = window.innerHeight;
-                const documentHeight = document.documentElement.scrollHeight;
-                const middlePosition = documentHeight / 2 - windowHeight / 2;
-                
-                if (scrollPosition >= middlePosition - 200) {
-                    wasShown = true;
-                    smiley.style.opacity = '1';
-                    smiley.style.left = '-100px';
-                    smiley.style.top = `${windowHeight / 2}px`;
-                    smiley.style.animation = 'floatAndRotate 8s linear forwards';
-                    
-                    setTimeout(() => {
-                        smiley.style.opacity = '0';
-                    }, 8000);
-                }
-            });
-        }
-
         // Галерея изображений для глав
         function initChapterGalleries() {
             document.querySelectorAll('.chapter-image-container').forEach(container => {
@@ -1266,12 +1197,8 @@
                     // Добавляем анимацию к текущему изображению
                     const currentImg = images[currentIndex];
                     if (currentImg) {
-                        // Случайный выбор анимации
-                        const animationType = Math.random() > 0.5 ? 'subtlePulse' : 'subtlePulseReverse';
-                        const duration = 5 + Math.random() * 10; // 5-15 секунд
-                        const delay = Math.random() * 5; // Задержка 0-5 секунд
-                        
-                        currentImg.style.animation = `${animationType} ${duration}s ease-in-out ${delay}s infinite`;
+                        // Упрощенная анимация для слабых устройств
+                        currentImg.style.animation = 'subtlePulse 6s ease-in-out infinite';
                     }
                 }
                 
@@ -1332,7 +1259,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             lazyLoadImages();
             audioPlayer.init();
-            initFloatingSmiley();
             initChapterGalleries();
         });
     </script>
