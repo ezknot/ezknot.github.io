@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Бобруйск-Кассиопея | ༼ﾉຈل͜ຈ༽ﾉ𓍊𓋼</title>
     <!-- Подключаем шрифты -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Playfair+Display:wght@400;700&family=Flow+Circular&family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Playfair+Display:wght@400;700&family=Flow+Circular&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #121212;
@@ -28,6 +28,18 @@
             --accent-light: #7b68ee;
             --border: #ddd;
             --image-filter: brightness(1.05) contrast(1.05) saturate(1.1) sepia(0.05);
+        }
+        
+        /* Fallout Terminal Font */
+        @font-face {
+            font-family: 'Monofonto';
+            src: url('https://cdn.jsdelivr.net/gh/atomiclabs/cryptofonts@1.1.2/fonts/monofonto.eot');
+            src: url('https://cdn.jsdelivr.net/gh/atomiclabs/cryptofonts@1.1.2/fonts/monofonto.eot?#iefix') format('embedded-opentype'),
+                 url('https://cdn.jsdelivr.net/gh/atomiclabs/cryptofonts@1.1.2/fonts/monofonto.woff2') format('woff2'),
+                 url('https://cdn.jsdelivr.net/gh/atomiclabs/cryptofonts@1.1.2/fonts/monofonto.woff') format('woff'),
+                 url('https://cdn.jsdelivr.net/gh/atomiclabs/cryptofonts@1.1.2/fonts/monofonto.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
         }
         
         body {
@@ -689,7 +701,7 @@
         .fallout-terminal {
             background-color: #0a0a0a;
             color: #14fe17;
-            font-family: 'VT323', monospace;
+            font-family: 'Monofonto', monospace;
             padding: 20px;
             border: 2px solid #14fe17;
             border-radius: 5px;
@@ -697,6 +709,7 @@
             box-shadow: 0 0 15px rgba(20, 254, 23, 0.3);
             position: relative;
             overflow: hidden;
+            display: none;
         }
 
         .fallout-terminal::before {
@@ -858,7 +871,7 @@
             margin: 5px;
             cursor: pointer;
             transition: all 0.3s;
-            font-family: 'VT323', monospace;
+            font-family: 'Monofonto', monospace;
         }
 
         .fallout-button:hover {
@@ -878,7 +891,7 @@
             border: none;
             border-bottom: 1px solid #14fe17;
             color: #14fe17;
-            font-family: 'VT323', monospace;
+            font-family: 'Monofonto', monospace;
             width: 80%;
             padding: 5px;
             margin-left: 5px;
@@ -999,6 +1012,32 @@
             50% { border-color: #14fe17; }
         }
 
+        /* Кнопка для открытия терминала Fallout */
+        .fallout-terminal-btn {
+            position: fixed;
+            bottom: 70px;
+            left: 20px;
+            width: 30px;
+            height: 30px;
+            background-color: transparent;
+            border: none;
+            color: #14fe17;
+            font-family: 'Monofonto', monospace;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+
+        .fallout-terminal-btn:hover {
+            opacity: 1;
+            text-shadow: 0 0 10px rgba(20, 254, 23, 0.7);
+        }
+
         @media (max-width: 768px) {
             .book-container, .book-frame { padding: 1rem; }
             h1 { font-size: 1.8rem; }
@@ -1006,6 +1045,7 @@
             p { font-size: 1rem; line-height: 1.5; }
             .controls { bottom: 15px; right: 15px; }
             .font-btn { left: 15px; bottom: 15px; }
+            .fallout-terminal-btn { left: 15px; bottom: 65px; }
             .audio-panel, .font-panel { 
                 bottom: 70px; 
                 right: 15px; 
@@ -1046,6 +1086,7 @@
             .quote { padding: 0.8rem; margin: 1rem 0; font-size: 0.95rem; }
             .story-card { padding: 15px; }
             .story-title { font-size: 1.2rem; }
+            .fallout-terminal-btn { left: 15px; bottom: 60px; }
             
             .title-frame h1::before {
                 font-size: 0.7rem;
@@ -1077,6 +1118,9 @@
     <!-- Анимированный смайл -->
     <div class="floating-smiley" id="floatingSmiley">𓍊</div>
 
+    <!-- Кнопка для открытия терминала Fallout -->
+    <div class="fallout-terminal-btn" id="falloutTerminalBtn">→</div>
+
     <div class="controls">
         <button class="control-btn" id="themeToggle">☀︎</button>
         <button class="control-btn" id="audioToggle">♫</button>
@@ -1096,7 +1140,108 @@
         <div class="font-option active" data-font="'Noto Serif', serif">Noto Serif</div>
         <div class="font-option" data-font="'Flow Circular', cursive">Flow Circular</div>
         <div class="font-option" data-font="'Playfair Display', serif">Playfair Display</div>
-        <div class="font-option" data-font="'VT323', monospace">VT323 (80s)</div>
+    </div>
+
+    <!-- Терминал Fallout -->
+    <div class="fallout-terminal" id="falloutTerminal">
+        <div class="fallout-glitch"></div>
+        
+        <div class="fallout-header">
+            <h2 class="fallout-title">BOBRUISK-CASSIOPEIA TERMINAL</h2>
+            <div class="fallout-time" id="falloutClock">07:23:42</div>
+        </div>
+
+        <div class="fallout-status">
+            <span>STATUS: <span style="color: #a0fe17;">ONLINE</span></span>
+            <span>USER: <span style="color: #a0fe17;">GUEST</span></span>
+            <span>ACCESS: <span style="color: #a0fe17;">LEVEL 1</span></span>
+        </div>
+
+        <div class="fallout-content">
+            <div class="fallout-text">
+                Добро пожаловать в терминальную систему "Бобруйск-Кассиопея". Этот терминал предоставляет доступ к архивным материалам проекта. Все действия пользователя записываются.
+            </div>
+
+            <div class="fallout-divider"></div>
+
+            <div class="fallout-tabs">
+                <div class="fallout-tab active" onclick="switchFalloutTab('files')">ФАЙЛЫ</div>
+                <div class="fallout-tab" onclick="switchFalloutTab('logs')">ЛОГИ</div>
+                <div class="fallout-tab" onclick="switchFalloutTab('stats')">СТАТИСТИКА</div>
+            </div>
+
+            <div class="fallout-tab-content active" id="fallout-files">
+                <div class="fallout-command">LIST ARCHIVES</div>
+                <div class="fallout-response">
+                    <ul class="fallout-list">
+                        <li class="fallout-list-item" onclick="selectFalloutFile('bobruisk-dossier')">BOBRUISK_DOSSIER.TXT</li>
+                        <li class="fallout-list-item" onclick="selectFalloutFile('cassiopea-report')">CASSIOPEA_REPORT.TXT</li>
+                        <li class="fallout-list-item" onclick="selectFalloutFile('experiment-notes')">EXPERIMENT_NOTES.TXT</li>
+                        <li class="fallout-list-item" onclick="selectFalloutFile('subject-interviews')">SUBJECT_INTERVIEWS.TXT</li>
+                    </ul>
+                </div>
+
+                <div class="fallout-command">SELECT FILE: <span id="selectedFile">NONE</span></div>
+                <div class="fallout-response" id="fileContent" style="display: none;">
+                    <div id="bobruisk-dossier" class="fallout-file">
+                        <h3>ДОСЬЕ: ПРОЕКТ "БОБРУЙСК"</h3>
+                        <p>Кодовое имя: "Бобруйск"</p>
+                        <p>Статус: Активен</p>
+                        <p>Описание: Эксперимент по изучению коллективного бессознательного в условиях изоляции.</p>
+                    </div>
+                    
+                    <div id="cassiopea-report" class="fallout-file">
+                        <h3>ОТЧЕТ: КАССИОПЕЯ</h3>
+                        <p>Кодовое имя: "Кассиопея"</p>
+                        <p>Статус: Завершен</p>
+                        <p>Описание: Попытка создания искусственного нарративного поля.</p>
+                    </div>
+                    
+                    <div id="experiment-notes" class="fallout-file">
+                        <h3>ЗАМЕТКИ ПО ЭКСПЕРИМЕНТУ</h3>
+                        <p>Дата: ██/██/████</p>
+                        <p>Испытуемый ██ демонстрирует необычную реакцию на стимулы.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fallout-tab-content" id="fallout-logs">
+                <div class="fallout-command">ACCESS LOGS</div>
+                <div class="fallout-response">
+                    <p>[23.05.2077] Доступ к терминалу: УРОВЕНЬ 1 (ГОСТЬ)</p>
+                    <p>[22.05.2077] Обновление системы: версия 2.4.7</p>
+                    <p>[21.05.2077] Архивирование данных эксперимента ██████</p>
+                </div>
+            </div>
+
+            <div class="fallout-tab-content" id="fallout-stats">
+                <div class="fallout-command">SYSTEM STATS</div>
+                <div class="fallout-response">
+                    <p>ЗАГРУЗКА ЦП: 47%</p>
+                    <div class="fallout-progress" style="--progress: 47%"></div>
+                    
+                    <p>ПАМЯТЬ: 68%</p>
+                    <div class="fallout-progress" style="--progress: 68%"></div>
+                    
+                    <p>ХРАНИЛИЩЕ: 23%</p>
+                    <div class="fallout-progress" style="--progress: 23%"></div>
+                    
+                    <p>ПОСЛЕДНЕЕ ОБНОВЛЕНИЕ: 23.05.2077 07:21:13</p>
+                </div>
+            </div>
+
+            <div class="fallout-divider"></div>
+
+            <div class="fallout-prompt">
+                <span class="fallout-prompt-text">TERMINAL></span>
+                <input type="text" class="fallout-input" id="falloutInput" placeholder="Введите команду..." onkeypress="handleFalloutCommand(event)">
+                <div class="fallout-cursor"></div>
+            </div>
+        </div>
+
+        <div class="fallout-footer">
+            <p>VAULT-TEC MULTISERVICE TERMINAL v2.4.7 | ALL RIGHTS RESERVED</p>
+        </div>
     </div>
 
     <div class="book-container">
@@ -1106,7 +1251,6 @@
                 <button class="tab" data-tab="audio">Аудиокнига</button>
                 <button class="tab" data-tab="reviews">Отзывы</button>
                 <button class="tab" data-tab="archive">☰</button>
-                <button class="tab" data-tab="fallout">VAULT-TEC</button>
             </div>
 
             <div class="tab-content active" id="book-tab">
@@ -1304,121 +1448,6 @@
                             <span class="story-tag">Космос</span>
                             <span class="story-tag">Постапокалипсис</span>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tab-content" id="fallout-tab">
-                <div class="title-frame">
-                    <h1>VAULT-TEC TERMINAL</h1>
-                    <p style="color: var(--text-secondary);">Система управления архивом</p>
-                </div>
-
-                <div class="fallout-terminal">
-                    <div class="fallout-glitch"></div>
-                    
-                    <div class="fallout-header">
-                        <h2 class="fallout-title">VAULT-TEC ARCHIVE SYSTEM</h2>
-                        <div class="fallout-time" id="falloutClock">07:23:42</div>
-                    </div>
-
-                    <div class="fallout-status">
-                        <span>STATUS: <span style="color: #a0fe17;">ONLINE</span></span>
-                        <span>USER: <span style="color: #a0fe17;">GUEST</span></span>
-                        <span>ACCESS: <span style="color: #a0fe17;">LEVEL 1</span></span>
-                    </div>
-
-                    <div class="fallout-content">
-                        <div class="fallout-text">
-                            Добро пожаловать в систему архивов VAULT-TEC. Этот терминал предоставляет доступ к засекреченным материалам проекта "Бобруйск-Кассиопея". Все действия пользователя записываются.
-                        </div>
-
-                        <div class="fallout-divider"></div>
-
-                        <div class="fallout-tabs">
-                            <div class="fallout-tab active" onclick="switchFalloutTab('files')">ФАЙЛЫ</div>
-                            <div class="fallout-tab" onclick="switchFalloutTab('logs')">ЛОГИ</div>
-                            <div class="fallout-tab" onclick="switchFalloutTab('stats')">СТАТИСТИКА</div>
-                        </div>
-
-                        <div class="fallout-tab-content active" id="fallout-files">
-                            <div class="fallout-command">LIST ARCHIVES</div>
-                            <div class="fallout-response">
-                                <ul class="fallout-list">
-                                    <li class="fallout-list-item" onclick="selectFalloutFile('bobruisk-dossier')">BOBRUISK_DOSSIER.TXT</li>
-                                    <li class="fallout-list-item" onclick="selectFalloutFile('cassiopea-report')">CASSIOPEA_REPORT.TXT</li>
-                                    <li class="fallout-list-item" onclick="selectFalloutFile('experiment-notes')">EXPERIMENT_NOTES.TXT</li>
-                                    <li class="fallout-list-item" onclick="selectFalloutFile('subject-interviews')">SUBJECT_INTERVIEWS.TXT</li>
-                                    <li class="fallout-list-item" onclick="selectFalloutFile('termination-records')">TERMINATION_RECORDS.TXT [ДОСТУП ЗАПРЕЩЕН]</li>
-                                </ul>
-                            </div>
-
-                            <div class="fallout-command">SELECT FILE: <span id="selectedFile">NONE</span></div>
-                            <div class="fallout-response" id="fileContent" style="display: none;">
-                                <div id="bobruisk-dossier" class="fallout-file">
-                                    <h3>ДОСЬЕ: ПРОЕКТ "БОБРУЙСК"</h3>
-                                    <p>Кодовое имя: "Бобруйск"</p>
-                                    <p>Статус: Активен</p>
-                                    <p>Описание: Эксперимент по изучению коллективного бессознательного в условиях изоляции. Участники подвергались воздействию альтернативных нарративных структур.</p>
-                                    <p>Результаты: 73% испытуемых демонстрировали признаки нарративного диссонанса. 15% достигли состояния "просветления". 12% были утилизированы.</p>
-                                </div>
-                                
-                                <div id="cassiopea-report" class="fallout-file">
-                                    <h3>ОТЧЕТ: КАССИОПЕЯ</h3>
-                                    <p>Кодовое имя: "Кассиопея"</p>
-                                    <p>Статус: Завершен</p>
-                                    <p>Описание: Попытка создания искусственного нарративного поля с использованием резонансных частот. Цель - воздействие на массовое сознание.</p>
-                                    <p>Результаты: Эксперимент признан частично успешным. Обнаружены побочные эффекты в виде спонтанных проявлений альтернативных реальностей у 89% операторов.</p>
-                                </div>
-                                
-                                <div id="experiment-notes" class="fallout-file">
-                                    <h3>ЗАМЕТКИ ПО ЭКСПЕРИМЕНТУ</h3>
-                                    <p>Дата: ██/██/████</p>
-                                    <p>Испытуемый ██ демонстрирует необычную реакцию на стимулы. После 72 часов воздействия начал утверждать, что "Бобруйск - это состояние сознания".</p>
-                                    <p>Дата: ██/██/████</p>
-                                    <p>Контрольная группа ██ полностью утратила связь с консенсусной реальностью. Утверждают, что находятся "между строк".</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="fallout-tab-content" id="fallout-logs">
-                            <div class="fallout-command">ACCESS LOGS</div>
-                            <div class="fallout-response">
-                                <p>[23.05.2077] Доступ к терминалу: УРОВЕНЬ 1 (ГОСТЬ)</p>
-                                <p>[22.05.2077] Попытка несанкционированного доступа к файлу TERMINATION_RECORDS.TXT</p>
-                                <p>[21.05.2077] Обновление системы: версия 2.4.7</p>
-                                <p>[20.05.2077] Доступ к терминалу: УРОВЕНЬ 3 (НАУЧНЫЙ СОТРУДНИК)</p>
-                                <p>[19.05.2077] Архивирование данных эксперимента ██████</p>
-                            </div>
-                        </div>
-
-                        <div class="fallout-tab-content" id="fallout-stats">
-                            <div class="fallout-command">SYSTEM STATS</div>
-                            <div class="fallout-response">
-                                <p>ЗАГРУЗКА ЦП: 47%</p>
-                                <div class="fallout-progress" style="--progress: 47%"></div>
-                                
-                                <p>ПАМЯТЬ: 68%</p>
-                                <div class="fallout-progress" style="--progress: 68%"></div>
-                                
-                                <p>ХРАНИЛИЩЕ: 23%</p>
-                                <div class="fallout-progress" style="--progress: 23%"></div>
-                                
-                                <p>ПОСЛЕДНЕЕ ОБНОВЛЕНИЕ: 23.05.2077 07:21:13</p>
-                            </div>
-                        </div>
-
-                        <div class="fallout-divider"></div>
-
-                        <div class="fallout-prompt">
-                            <span class="fallout-prompt-text">VAULT-TEC></span>
-                            <input type="text" class="fallout-input" id="falloutInput" placeholder="Введите команду..." onkeypress="handleFalloutCommand(event)">
-                            <div class="fallout-cursor"></div>
-                        </div>
-                    </div>
-
-                    <div class="fallout-footer">
-                        <p>VAULT-TEC MULTISERVICE TERMINAL v2.4.7 | ALL RIGHTS RESERVED</p>
                     </div>
                 </div>
             </div>
@@ -1801,7 +1830,7 @@
                 } else if (command === 'clear') {
                     document.querySelector('.fallout-content').innerHTML = `
                         <div class="fallout-text">
-                            VAULT-TEC TERMINAL CLEARED. TYPE "HELP" FOR COMMAND LIST.
+                            TERMINAL CLEARED. TYPE "HELP" FOR COMMAND LIST.
                         </div>
                         ${document.querySelector('.fallout-content').innerHTML}
                     `;
@@ -1841,6 +1870,17 @@
             updateFalloutClock();
         }
 
+        // Управление видимостью терминала Fallout
+        const falloutTerminalBtn = document.getElementById('falloutTerminalBtn');
+        const falloutTerminal = document.getElementById('falloutTerminal');
+        
+        falloutTerminalBtn.addEventListener('click', () => {
+            falloutTerminal.style.display = falloutTerminal.style.display === 'block' ? 'none' : 'block';
+            if (falloutTerminal.style.display === 'block') {
+                initFalloutTerminal();
+            }
+        });
+
         // Инициализация
         document.addEventListener('DOMContentLoaded', () => {
             lazyLoadImages();
@@ -1851,13 +1891,7 @@
             // Обновление времени в терминале
             setInterval(updateFalloutClock, 1000);
             updateFalloutClock();
-            
-            // Инициализация терминала Fallout при загрузке страницы
-            initFalloutTerminal();
         });
-
-        // Добавляем обработчик для вкладки Fallout
-        document.querySelector('.tab[data-tab="fallout"]').addEventListener('click', initFalloutTerminal);
     </script>
 </body>
 </html>
