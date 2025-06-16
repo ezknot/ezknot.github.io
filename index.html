@@ -685,114 +685,318 @@
             transition: filter 0.5s ease;
         }
 
-        /* Стили для раздела "80s Desktop" */
-        .desktop-80s {
-            background-color: #000066;
-            color: #00FF00;
+        /* Стили для Fallout Terminal */
+        .fallout-terminal {
+            background-color: #0a0a0a;
+            color: #14fe17;
             font-family: 'VT323', monospace;
             padding: 20px;
-            border: 2px solid #00FF00;
+            border: 2px solid #14fe17;
             border-radius: 5px;
             margin: 20px 0;
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            box-shadow: 0 0 15px rgba(20, 254, 23, 0.3);
+            position: relative;
+            overflow: hidden;
         }
 
-        .desktop-header {
+        .fallout-terminal::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(
+                    rgba(20, 254, 23, 0.1) 1px, 
+                    transparent 1px
+                );
+            background-size: 100% 2px;
+            animation: scanlines 1s steps(60) infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes scanlines {
+            from { background-position: 0 0; }
+            to { background-position: 0 60px; }
+        }
+
+        .fallout-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
-            border-bottom: 1px solid #00FF00;
+            border-bottom: 1px solid #14fe17;
             padding-bottom: 5px;
+            position: relative;
+            z-index: 2;
         }
 
-        .desktop-title {
+        .fallout-title {
             font-size: 1.5rem;
-            color: #00FF00;
-            text-shadow: 0 0 5px rgba(0, 255, 0, 0.7);
+            color: #14fe17;
+            text-shadow: 0 0 5px rgba(20, 254, 23, 0.7);
             margin: 0;
+            letter-spacing: 1px;
         }
 
-        .desktop-time {
+        .fallout-time {
             font-size: 1.2rem;
-            color: #00FF00;
+            color: #14fe17;
         }
 
-        .desktop-file-list {
+        .fallout-content {
+            position: relative;
+            z-index: 2;
+            line-height: 1.4;
+        }
+
+        .fallout-text {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .fallout-prompt {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .fallout-prompt-text {
+            color: #14fe17;
+            margin-right: 5px;
+        }
+
+        .fallout-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 15px;
+            background-color: #14fe17;
+            animation: blink 1s infinite;
+            box-shadow: 0 0 5px #14fe17;
+        }
+
+        .fallout-command {
+            color: #14fe17;
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .fallout-command::before {
+            content: ">";
+            position: absolute;
+            left: 0;
+            color: #14fe17;
+        }
+
+        .fallout-response {
+            color: #14fe17;
+            margin-bottom: 15px;
+            padding-left: 20px;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+            animation-delay: 0.3s;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .fallout-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #14fe17, transparent);
+            margin: 15px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .fallout-footer {
+            margin-top: 15px;
+            font-size: 0.8rem;
+            color: #0e9e10;
+            text-align: right;
+            position: relative;
+            z-index: 2;
+        }
+
+        .fallout-glitch {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(
+                    rgba(20, 254, 23, 0.05) 1px, 
+                    transparent 1px
+                );
+            background-size: 100% 3px;
+            animation: glitch 10s linear infinite;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.5;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        .fallout-button {
+            background: transparent;
+            color: #14fe17;
+            border: 1px solid #14fe17;
+            padding: 5px 10px;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'VT323', monospace;
+        }
+
+        .fallout-button:hover {
+            background: rgba(20, 254, 23, 0.2);
+            box-shadow: 0 0 10px rgba(20, 254, 23, 0.5);
+        }
+
+        .fallout-status {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .fallout-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #14fe17;
+            color: #14fe17;
+            font-family: 'VT323', monospace;
+            width: 80%;
+            padding: 5px;
+            margin-left: 5px;
+            outline: none;
+        }
+
+        .fallout-input:focus {
+            box-shadow: 0 0 5px rgba(20, 254, 23, 0.5);
+        }
+
+        .fallout-list {
             list-style-type: none;
             padding: 0;
             margin: 0;
         }
 
-        .desktop-file {
-            padding: 5px 10px;
+        .fallout-list-item {
+            padding: 5px 0;
             cursor: pointer;
             transition: all 0.2s;
             position: relative;
+            padding-left: 20px;
         }
 
-        .desktop-file::before {
-            content: ">";
-            margin-right: 8px;
-            color: #00FF00;
-        }
-
-        .desktop-file:hover {
-            background-color: rgba(0, 255, 0, 0.1);
-            color: #FFFF00;
-        }
-
-        .desktop-file.active {
-            background-color: rgba(0, 255, 0, 0.2);
-            color: #FFFF00;
-        }
-
-        .desktop-file-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-            background-color: rgba(0, 0, 0, 0.3);
-            margin-left: 20px;
-            border-left: 1px dashed #00FF00;
-            padding-left: 10px;
-        }
-
-        .desktop-file-content.show {
-            max-height: 500px;
-            padding: 10px;
-            margin-top: 5px;
-            margin-bottom: 10px;
-        }
-
-        .desktop-footer {
-            margin-top: 15px;
+        .fallout-list-item::before {
+            content: "■";
+            position: absolute;
+            left: 0;
+            color: #14fe17;
             font-size: 0.8rem;
-            color: #00AA00;
-            text-align: right;
         }
 
-        .desktop-prompt {
+        .fallout-list-item:hover {
+            color: #a0fe17;
+            text-shadow: 0 0 5px rgba(160, 254, 23, 0.7);
+        }
+
+        .fallout-list-item.active {
+            color: #a0fe17;
+            font-weight: bold;
+        }
+
+        .fallout-progress {
+            width: 100%;
+            height: 10px;
+            background: rgba(20, 254, 23, 0.1);
+            margin: 10px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fallout-progress::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: var(--progress, 0%);
+            background: #14fe17;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+
+        .fallout-tabs {
             display: flex;
-            align-items: center;
-            margin-top: 10px;
+            border-bottom: 1px solid #14fe17;
+            margin-bottom: 15px;
         }
 
-        .desktop-prompt-text {
-            color: #00FF00;
+        .fallout-tab {
+            padding: 5px 15px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
             margin-right: 5px;
+            position: relative;
         }
 
-        .desktop-cursor {
-            display: inline-block;
-            width: 10px;
-            height: 15px;
-            background-color: #00FF00;
-            animation: blink 1s infinite;
+        .fallout-tab.active {
+            border: 1px solid #14fe17;
+            border-bottom: 1px solid #0a0a0a;
+            margin-bottom: -1px;
+            background: #0a0a0a;
+            color: #a0fe17;
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+        .fallout-tab-content {
+            display: none;
+        }
+
+        .fallout-tab-content.active {
+            display: block;
+        }
+
+        /* Анимация печатающегося текста */
+        .typewriter {
+            overflow: hidden;
+            border-right: 2px solid #14fe17;
+            white-space: nowrap;
+            margin: 0 auto;
+            animation: 
+                typing 3.5s steps(40, end),
+                blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #14fe17; }
         }
 
         @media (max-width: 768px) {
@@ -902,7 +1106,7 @@
                 <button class="tab" data-tab="audio">Аудиокнига</button>
                 <button class="tab" data-tab="reviews">Отзывы</button>
                 <button class="tab" data-tab="archive">☰</button>
-                <button class="tab" data-tab="desktop">80s PC</button>
+                <button class="tab" data-tab="fallout">VAULT-TEC</button>
             </div>
 
             <div class="tab-content active" id="book-tab">
@@ -1104,99 +1308,117 @@
                 </div>
             </div>
 
-            <div class="tab-content" id="desktop-tab">
+            <div class="tab-content" id="fallout-tab">
                 <div class="title-frame">
-                    <h1>DOS 3.30</h1>
-                    <p style="color: var(--text-secondary);">Система управления файлами</p>
+                    <h1>VAULT-TEC TERMINAL</h1>
+                    <p style="color: var(--text-secondary);">Система управления архивом</p>
                 </div>
 
-                <div class="desktop-80s">
-                    <div class="desktop-header">
-                        <h2 class="desktop-title">B:\> DIR</h2>
-                        <div class="desktop-time" id="desktopClock">15:30:42</div>
+                <div class="fallout-terminal">
+                    <div class="fallout-glitch"></div>
+                    
+                    <div class="fallout-header">
+                        <h2 class="fallout-title">VAULT-TEC ARCHIVE SYSTEM</h2>
+                        <div class="fallout-time" id="falloutClock">07:23:42</div>
                     </div>
 
-                    <ul class="desktop-file-list">
-                        <li class="desktop-file" onclick="toggleFile(this)">
-                            AUTOEXEC.BAT
-                            <div class="desktop-file-content">
-                                <p>@ECHO OFF</p>
-                                <p>PROMPT $p$g</p>
-                                <p>PATH C:\DOS;C:\UTILS</p>
-                                <p>SET TEMP=C:\TEMP</p>
-                                <p>MODE CON RATE=32 DELAY=1</p>
-                                <p>CLS</p>
-                                <p>ECHO Добро пожаловать в систему</p>
-                            </div>
-                        </li>
-                        <li class="desktop-file" onclick="toggleFile(this)">
-                            CONFIG.SYS
-                            <div class="desktop-file-content">
-                                <p>DEVICE=C:\DOS\HIMEM.SYS</p>
-                                <p>DEVICE=C:\DOS\EMM386.EXE RAM</p>
-                                <p>BUFFERS=15,0</p>
-                                <p>FILES=30</p>
-                                <p>LASTDRIVE=Z</p>
-                                <p>STACKS=0,0</p>
-                            </div>
-                        </li>
-                        <li class="desktop-file" onclick="toggleFile(this)">
-                            README.TXT
-                            <div class="desktop-file-content">
-                                <p>БОБРУЙСК-КАССИОПЕЯ v1.0</p>
-                                <p>----------------------</p>
-                                <p>Это текстовая версия культового произведения.</p>
-                                <p>Для запуска введите: RUNME.BAT</p>
-                                <p>Требования: 640K RAM, CGA/EGA/VGA</p>
-                                <p>Рекомендуется использовать звуковую карту Sound Blaster.</p>
-                            </div>
-                        </li>
-                        <li class="desktop-file" onclick="toggleFile(this)">
-                            RUNME.BAT
-                            <div class="desktop-file-content">
-                                <p>@ECHO OFF</p>
-                                <p>CLS</p>
-                                <p>ECHO Загрузка Бобруйск-Кассиопея...</p>
-                                <p>PAUSE</p>
-                                <p>BOBRUISK.EXE</p>
-                                <p>IF ERRORLEVEL 1 GOTO ERROR</p>
-                                <p>GOTO END</p>
-                                <p>:ERROR</p>
-                                <p>ECHO Ошибка запуска. Проверьте конфигурацию.</p>
-                                <p>:END</p>
-                            </div>
-                        </li>
-                        <li class="desktop-file" onclick="toggleFile(this)">
-                            CHAPTER1.TXT
-                            <div class="desktop-file-content">
-                                <p>ГЛАВА ПЕРВАЯ</p>
-                                <p>Алхимия пустых карманов</p>
-                                <p>----------------------------------------</p>
-                                <p>Тьма сгущалась над городом, поглощая последние лучи заката. В этом предисловии я хочу провести вас через те мысли и переживания, которые легли в основу этой истории. Это не просто книга — это путешествие в глубины человеческой души.</p>
-                                <p>Каждая глава — новый слой реальности, который мы будем вместе исследовать. Современный ритм повествования сочетается здесь с вечными темами, которые тревожат нас под покровом ночи.</p>
-                                <p>"Иногда пятак в диване - это последний знак что мир ещё не забыл тебя."</p>
-                            </div>
-                        </li>
-                        <li class="desktop-file" onclick="toggleFile(this)">
-                            CHAPTER2.TXT
-                            <div class="desktop-file-content">
-                                <p>ГЛАВА ВТОРАЯ</p>
-                                <p>Экзистенциальный слалом</p>
-                                <p>----------------------------------------</p>
-                                <p>Город никогда не спит — это ложь. В три часа ночи наступает момент абсолютной тишины, когда даже неоновые огни кажутся приглушёнными. Именно в этот час я впервые увидел Его.</p>
-                                <p>Тени на стенах двигались неестественным образом, будто жили собственной жизнью. Воздух был насыщен электричеством предгрозового напряжения, хотя метеорологи не предсказывали осадков.</p>
-                                <p>"Магазин - это храм, где сканер - единственный бог."</p>
-                            </div>
-                        </li>
-                    </ul>
-
-                    <div class="desktop-prompt">
-                        <span class="desktop-prompt-text">B:\></span>
-                        <div class="desktop-cursor"></div>
+                    <div class="fallout-status">
+                        <span>STATUS: <span style="color: #a0fe17;">ONLINE</span></span>
+                        <span>USER: <span style="color: #a0fe17;">GUEST</span></span>
+                        <span>ACCESS: <span style="color: #a0fe17;">LEVEL 1</span></span>
                     </div>
 
-                    <div class="desktop-footer">
-                        <p>640K RAM свободно | 1.2MB свободно на B:</p>
+                    <div class="fallout-content">
+                        <div class="fallout-text">
+                            Добро пожаловать в систему архивов VAULT-TEC. Этот терминал предоставляет доступ к засекреченным материалам проекта "Бобруйск-Кассиопея". Все действия пользователя записываются.
+                        </div>
+
+                        <div class="fallout-divider"></div>
+
+                        <div class="fallout-tabs">
+                            <div class="fallout-tab active" onclick="switchFalloutTab('files')">ФАЙЛЫ</div>
+                            <div class="fallout-tab" onclick="switchFalloutTab('logs')">ЛОГИ</div>
+                            <div class="fallout-tab" onclick="switchFalloutTab('stats')">СТАТИСТИКА</div>
+                        </div>
+
+                        <div class="fallout-tab-content active" id="fallout-files">
+                            <div class="fallout-command">LIST ARCHIVES</div>
+                            <div class="fallout-response">
+                                <ul class="fallout-list">
+                                    <li class="fallout-list-item" onclick="selectFalloutFile('bobruisk-dossier')">BOBRUISK_DOSSIER.TXT</li>
+                                    <li class="fallout-list-item" onclick="selectFalloutFile('cassiopea-report')">CASSIOPEA_REPORT.TXT</li>
+                                    <li class="fallout-list-item" onclick="selectFalloutFile('experiment-notes')">EXPERIMENT_NOTES.TXT</li>
+                                    <li class="fallout-list-item" onclick="selectFalloutFile('subject-interviews')">SUBJECT_INTERVIEWS.TXT</li>
+                                    <li class="fallout-list-item" onclick="selectFalloutFile('termination-records')">TERMINATION_RECORDS.TXT [ДОСТУП ЗАПРЕЩЕН]</li>
+                                </ul>
+                            </div>
+
+                            <div class="fallout-command">SELECT FILE: <span id="selectedFile">NONE</span></div>
+                            <div class="fallout-response" id="fileContent" style="display: none;">
+                                <div id="bobruisk-dossier" class="fallout-file">
+                                    <h3>ДОСЬЕ: ПРОЕКТ "БОБРУЙСК"</h3>
+                                    <p>Кодовое имя: "Бобруйск"</p>
+                                    <p>Статус: Активен</p>
+                                    <p>Описание: Эксперимент по изучению коллективного бессознательного в условиях изоляции. Участники подвергались воздействию альтернативных нарративных структур.</p>
+                                    <p>Результаты: 73% испытуемых демонстрировали признаки нарративного диссонанса. 15% достигли состояния "просветления". 12% были утилизированы.</p>
+                                </div>
+                                
+                                <div id="cassiopea-report" class="fallout-file">
+                                    <h3>ОТЧЕТ: КАССИОПЕЯ</h3>
+                                    <p>Кодовое имя: "Кассиопея"</p>
+                                    <p>Статус: Завершен</p>
+                                    <p>Описание: Попытка создания искусственного нарративного поля с использованием резонансных частот. Цель - воздействие на массовое сознание.</p>
+                                    <p>Результаты: Эксперимент признан частично успешным. Обнаружены побочные эффекты в виде спонтанных проявлений альтернативных реальностей у 89% операторов.</p>
+                                </div>
+                                
+                                <div id="experiment-notes" class="fallout-file">
+                                    <h3>ЗАМЕТКИ ПО ЭКСПЕРИМЕНТУ</h3>
+                                    <p>Дата: ██/██/████</p>
+                                    <p>Испытуемый ██ демонстрирует необычную реакцию на стимулы. После 72 часов воздействия начал утверждать, что "Бобруйск - это состояние сознания".</p>
+                                    <p>Дата: ██/██/████</p>
+                                    <p>Контрольная группа ██ полностью утратила связь с консенсусной реальностью. Утверждают, что находятся "между строк".</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fallout-tab-content" id="fallout-logs">
+                            <div class="fallout-command">ACCESS LOGS</div>
+                            <div class="fallout-response">
+                                <p>[23.05.2077] Доступ к терминалу: УРОВЕНЬ 1 (ГОСТЬ)</p>
+                                <p>[22.05.2077] Попытка несанкционированного доступа к файлу TERMINATION_RECORDS.TXT</p>
+                                <p>[21.05.2077] Обновление системы: версия 2.4.7</p>
+                                <p>[20.05.2077] Доступ к терминалу: УРОВЕНЬ 3 (НАУЧНЫЙ СОТРУДНИК)</p>
+                                <p>[19.05.2077] Архивирование данных эксперимента ██████</p>
+                            </div>
+                        </div>
+
+                        <div class="fallout-tab-content" id="fallout-stats">
+                            <div class="fallout-command">SYSTEM STATS</div>
+                            <div class="fallout-response">
+                                <p>ЗАГРУЗКА ЦП: 47%</p>
+                                <div class="fallout-progress" style="--progress: 47%"></div>
+                                
+                                <p>ПАМЯТЬ: 68%</p>
+                                <div class="fallout-progress" style="--progress: 68%"></div>
+                                
+                                <p>ХРАНИЛИЩЕ: 23%</p>
+                                <div class="fallout-progress" style="--progress: 23%"></div>
+                                
+                                <p>ПОСЛЕДНЕЕ ОБНОВЛЕНИЕ: 23.05.2077 07:21:13</p>
+                            </div>
+                        </div>
+
+                        <div class="fallout-divider"></div>
+
+                        <div class="fallout-prompt">
+                            <span class="fallout-prompt-text">VAULT-TEC></span>
+                            <input type="text" class="fallout-input" id="falloutInput" placeholder="Введите команду..." onkeypress="handleFalloutCommand(event)">
+                            <div class="fallout-cursor"></div>
+                        </div>
+                    </div>
+
+                    <div class="fallout-footer">
+                        <p>VAULT-TEC MULTISERVICE TERMINAL v2.4.7 | ALL RIGHTS RESERVED</p>
                     </div>
                 </div>
             </div>
@@ -1418,23 +1640,6 @@
             }, 300);
         }
 
-        // Функция для раскрытия файлов в разделе 80s PC
-        function toggleFile(fileElement) {
-            fileElement.classList.toggle('active');
-            const content = fileElement.querySelector('.desktop-file-content');
-            content.classList.toggle('show');
-        }
-
-        // Обновление времени в разделе 80s PC
-        function updateDesktopClock() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('ru-RU', {hour12: false});
-            const clockElement = document.getElementById('desktopClock');
-            if (clockElement) {
-                clockElement.textContent = timeString;
-            }
-        }
-
         // Анимированный смайл (одноразовый)
         function initFloatingSmiley() {
             const smiley = document.getElementById('floatingSmiley');
@@ -1554,6 +1759,88 @@
             });
         }
 
+        // Функции для работы с терминалом Fallout
+        function switchFalloutTab(tabId) {
+            document.querySelectorAll('.fallout-tab, .fallout-tab-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            document.querySelector(`.fallout-tab[onclick="switchFalloutTab('${tabId}')"]`).classList.add('active');
+            document.getElementById(`fallout-${tabId}`).classList.add('active');
+        }
+
+        function selectFalloutFile(fileId) {
+            document.querySelectorAll('.fallout-list-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            document.getElementById('selectedFile').textContent = fileId.toUpperCase();
+            
+            // Показываем содержимое файла
+            const fileContent = document.getElementById('fileContent');
+            fileContent.style.display = 'block';
+            
+            // Скрываем все файлы и показываем только выбранный
+            document.querySelectorAll('.fallout-file').forEach(file => {
+                file.style.display = 'none';
+            });
+            
+            document.getElementById(fileId).style.display = 'block';
+        }
+
+        function handleFalloutCommand(e) {
+            if (e.key === 'Enter') {
+                const input = document.getElementById('falloutInput');
+                const command = input.value.trim().toLowerCase();
+                input.value = '';
+                
+                // Здесь можно добавить обработку команд
+                if (command === 'help') {
+                    alert('Доступные команды: help, clear, about, exit');
+                } else if (command === 'clear') {
+                    document.querySelector('.fallout-content').innerHTML = `
+                        <div class="fallout-text">
+                            VAULT-TEC TERMINAL CLEARED. TYPE "HELP" FOR COMMAND LIST.
+                        </div>
+                        ${document.querySelector('.fallout-content').innerHTML}
+                    `;
+                } else {
+                    const response = document.createElement('div');
+                    response.className = 'fallout-response';
+                    response.textContent = `Команда "${command}" не распознана. Введите "help" для списка команд.`;
+                    document.querySelector('.fallout-content').appendChild(response);
+                }
+            }
+        }
+
+        // Обновление времени в терминале Fallout
+        function updateFalloutClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ru-RU', {hour12: false});
+            const clockElement = document.getElementById('falloutClock');
+            if (clockElement) {
+                clockElement.textContent = timeString;
+            }
+        }
+
+        // Инициализация терминала Fallout
+        function initFalloutTerminal() {
+            // Анимация печатающегося текста при первом открытии
+            const welcomeText = document.querySelector('.fallout-text');
+            welcomeText.classList.add('typewriter');
+            
+            // Удаляем анимацию после завершения
+            setTimeout(() => {
+                welcomeText.classList.remove('typewriter');
+                welcomeText.style.borderRight = 'none';
+            }, 3500);
+            
+            // Обновление времени
+            setInterval(updateFalloutClock, 1000);
+            updateFalloutClock();
+        }
+
         // Инициализация
         document.addEventListener('DOMContentLoaded', () => {
             lazyLoadImages();
@@ -1561,10 +1848,16 @@
             initFloatingSmiley();
             initChapterGalleries();
             
-            // Обновление времени в разделе 80s PC
-            setInterval(updateDesktopClock, 1000);
-            updateDesktopClock();
+            // Обновление времени в терминале
+            setInterval(updateFalloutClock, 1000);
+            updateFalloutClock();
+            
+            // Инициализация терминала Fallout при загрузке страницы
+            initFalloutTerminal();
         });
+
+        // Добавляем обработчик для вкладки Fallout
+        document.querySelector('.tab[data-tab="fallout"]').addEventListener('click', initFalloutTerminal);
     </script>
 </body>
 </html>
