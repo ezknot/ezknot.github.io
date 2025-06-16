@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Бобруйск-Кассиопея | ༼ﾉຈل͜ຈ༽ﾉ𓍊𓋼</title>
     <!-- Подключаем шрифты -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Playfair+Display:wght@400;700&family=Flow+Circular&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Playfair+Display:wght@400;700&family=Flow+Circular&family=VT323&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #121212;
@@ -685,6 +685,116 @@
             transition: filter 0.5s ease;
         }
 
+        /* Стили для раздела "80s Desktop" */
+        .desktop-80s {
+            background-color: #000066;
+            color: #00FF00;
+            font-family: 'VT323', monospace;
+            padding: 20px;
+            border: 2px solid #00FF00;
+            border-radius: 5px;
+            margin: 20px 0;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+
+        .desktop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #00FF00;
+            padding-bottom: 5px;
+        }
+
+        .desktop-title {
+            font-size: 1.5rem;
+            color: #00FF00;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.7);
+            margin: 0;
+        }
+
+        .desktop-time {
+            font-size: 1.2rem;
+            color: #00FF00;
+        }
+
+        .desktop-file-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .desktop-file {
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .desktop-file::before {
+            content: ">";
+            margin-right: 8px;
+            color: #00FF00;
+        }
+
+        .desktop-file:hover {
+            background-color: rgba(0, 255, 0, 0.1);
+            color: #FFFF00;
+        }
+
+        .desktop-file.active {
+            background-color: rgba(0, 255, 0, 0.2);
+            color: #FFFF00;
+        }
+
+        .desktop-file-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background-color: rgba(0, 0, 0, 0.3);
+            margin-left: 20px;
+            border-left: 1px dashed #00FF00;
+            padding-left: 10px;
+        }
+
+        .desktop-file-content.show {
+            max-height: 500px;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+
+        .desktop-footer {
+            margin-top: 15px;
+            font-size: 0.8rem;
+            color: #00AA00;
+            text-align: right;
+        }
+
+        .desktop-prompt {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .desktop-prompt-text {
+            color: #00FF00;
+            margin-right: 5px;
+        }
+
+        .desktop-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 15px;
+            background-color: #00FF00;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
         @media (max-width: 768px) {
             .book-container, .book-frame { padding: 1rem; }
             h1 { font-size: 1.8rem; }
@@ -782,6 +892,7 @@
         <div class="font-option active" data-font="'Noto Serif', serif">Noto Serif</div>
         <div class="font-option" data-font="'Flow Circular', cursive">Flow Circular</div>
         <div class="font-option" data-font="'Playfair Display', serif">Playfair Display</div>
+        <div class="font-option" data-font="'VT323', monospace">VT323 (80s)</div>
     </div>
 
     <div class="book-container">
@@ -791,6 +902,7 @@
                 <button class="tab" data-tab="audio">Аудиокнига</button>
                 <button class="tab" data-tab="reviews">Отзывы</button>
                 <button class="tab" data-tab="archive">☰</button>
+                <button class="tab" data-tab="desktop">80s PC</button>
             </div>
 
             <div class="tab-content active" id="book-tab">
@@ -988,6 +1100,103 @@
                             <span class="story-tag">Космос</span>
                             <span class="story-tag">Постапокалипсис</span>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="desktop-tab">
+                <div class="title-frame">
+                    <h1>DOS 3.30</h1>
+                    <p style="color: var(--text-secondary);">Система управления файлами</p>
+                </div>
+
+                <div class="desktop-80s">
+                    <div class="desktop-header">
+                        <h2 class="desktop-title">B:\> DIR</h2>
+                        <div class="desktop-time" id="desktopClock">15:30:42</div>
+                    </div>
+
+                    <ul class="desktop-file-list">
+                        <li class="desktop-file" onclick="toggleFile(this)">
+                            AUTOEXEC.BAT
+                            <div class="desktop-file-content">
+                                <p>@ECHO OFF</p>
+                                <p>PROMPT $p$g</p>
+                                <p>PATH C:\DOS;C:\UTILS</p>
+                                <p>SET TEMP=C:\TEMP</p>
+                                <p>MODE CON RATE=32 DELAY=1</p>
+                                <p>CLS</p>
+                                <p>ECHO Добро пожаловать в систему</p>
+                            </div>
+                        </li>
+                        <li class="desktop-file" onclick="toggleFile(this)">
+                            CONFIG.SYS
+                            <div class="desktop-file-content">
+                                <p>DEVICE=C:\DOS\HIMEM.SYS</p>
+                                <p>DEVICE=C:\DOS\EMM386.EXE RAM</p>
+                                <p>BUFFERS=15,0</p>
+                                <p>FILES=30</p>
+                                <p>LASTDRIVE=Z</p>
+                                <p>STACKS=0,0</p>
+                            </div>
+                        </li>
+                        <li class="desktop-file" onclick="toggleFile(this)">
+                            README.TXT
+                            <div class="desktop-file-content">
+                                <p>БОБРУЙСК-КАССИОПЕЯ v1.0</p>
+                                <p>----------------------</p>
+                                <p>Это текстовая версия культового произведения.</p>
+                                <p>Для запуска введите: RUNME.BAT</p>
+                                <p>Требования: 640K RAM, CGA/EGA/VGA</p>
+                                <p>Рекомендуется использовать звуковую карту Sound Blaster.</p>
+                            </div>
+                        </li>
+                        <li class="desktop-file" onclick="toggleFile(this)">
+                            RUNME.BAT
+                            <div class="desktop-file-content">
+                                <p>@ECHO OFF</p>
+                                <p>CLS</p>
+                                <p>ECHO Загрузка Бобруйск-Кассиопея...</p>
+                                <p>PAUSE</p>
+                                <p>BOBRUISK.EXE</p>
+                                <p>IF ERRORLEVEL 1 GOTO ERROR</p>
+                                <p>GOTO END</p>
+                                <p>:ERROR</p>
+                                <p>ECHO Ошибка запуска. Проверьте конфигурацию.</p>
+                                <p>:END</p>
+                            </div>
+                        </li>
+                        <li class="desktop-file" onclick="toggleFile(this)">
+                            CHAPTER1.TXT
+                            <div class="desktop-file-content">
+                                <p>ГЛАВА ПЕРВАЯ</p>
+                                <p>Алхимия пустых карманов</p>
+                                <p>----------------------------------------</p>
+                                <p>Тьма сгущалась над городом, поглощая последние лучи заката. В этом предисловии я хочу провести вас через те мысли и переживания, которые легли в основу этой истории. Это не просто книга — это путешествие в глубины человеческой души.</p>
+                                <p>Каждая глава — новый слой реальности, который мы будем вместе исследовать. Современный ритм повествования сочетается здесь с вечными темами, которые тревожат нас под покровом ночи.</p>
+                                <p>"Иногда пятак в диване - это последний знак что мир ещё не забыл тебя."</p>
+                            </div>
+                        </li>
+                        <li class="desktop-file" onclick="toggleFile(this)">
+                            CHAPTER2.TXT
+                            <div class="desktop-file-content">
+                                <p>ГЛАВА ВТОРАЯ</p>
+                                <p>Экзистенциальный слалом</p>
+                                <p>----------------------------------------</p>
+                                <p>Город никогда не спит — это ложь. В три часа ночи наступает момент абсолютной тишины, когда даже неоновые огни кажутся приглушёнными. Именно в этот час я впервые увидел Его.</p>
+                                <p>Тени на стенах двигались неестественным образом, будто жили собственной жизнью. Воздух был насыщен электричеством предгрозового напряжения, хотя метеорологи не предсказывали осадков.</p>
+                                <p>"Магазин - это храм, где сканер - единственный бог."</p>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="desktop-prompt">
+                        <span class="desktop-prompt-text">B:\></span>
+                        <div class="desktop-cursor"></div>
+                    </div>
+
+                    <div class="desktop-footer">
+                        <p>640K RAM свободно | 1.2MB свободно на B:</p>
                     </div>
                 </div>
             </div>
@@ -1209,6 +1418,23 @@
             }, 300);
         }
 
+        // Функция для раскрытия файлов в разделе 80s PC
+        function toggleFile(fileElement) {
+            fileElement.classList.toggle('active');
+            const content = fileElement.querySelector('.desktop-file-content');
+            content.classList.toggle('show');
+        }
+
+        // Обновление времени в разделе 80s PC
+        function updateDesktopClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ru-RU', {hour12: false});
+            const clockElement = document.getElementById('desktopClock');
+            if (clockElement) {
+                clockElement.textContent = timeString;
+            }
+        }
+
         // Анимированный смайл (одноразовый)
         function initFloatingSmiley() {
             const smiley = document.getElementById('floatingSmiley');
@@ -1334,6 +1560,10 @@
             audioPlayer.init();
             initFloatingSmiley();
             initChapterGalleries();
+            
+            // Обновление времени в разделе 80s PC
+            setInterval(updateDesktopClock, 1000);
+            updateDesktopClock();
         });
     </script>
 </body>
