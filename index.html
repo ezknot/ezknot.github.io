@@ -549,10 +549,16 @@
             padding: 20px;
             border: 2px solid var(--accent);
             border-radius: 5px;
-            margin: 20px 0;
             box-shadow: 0 0 15px rgba(127, 90, 240, 0.5);
-            position: relative;
-            overflow: hidden;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 1000;
             display: none;
         }
         .fallout-terminal * {
@@ -645,6 +651,10 @@
             animation-delay: 0.3s;
         }
         @keyframes fadeIn { to { opacity: 1; } }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
         .fallout-divider {
             height: 1px;
             background: linear-gradient(90deg, transparent, var(--accent), transparent);
@@ -810,7 +820,7 @@
             height: 50px;
             background-color: var(--accent);
             border: none;
-            border-radius: 50%;
+            border-radius: 5px;
             color: white;
             font-size: 24px;
             display: flex;
@@ -834,7 +844,7 @@
             right: -5px;
             bottom: -5px;
             border: 2px solid var(--accent-light);
-            border-radius: 50%;
+            border-radius: 5px;
             animation: pulse-border 2s infinite;
             opacity: 0;
             pointer-events: none;
@@ -846,6 +856,16 @@
             0% { transform: scale(1); opacity: 0.7; }
             70% { transform: scale(1.3); opacity: 0; }
             100% { opacity: 0; }
+        }
+        .terminal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            display: none;
         }
         @media (max-width: 768px) {
             .book-container, .book-frame { padding: 1rem; }
@@ -877,6 +897,11 @@
             .chapter-image-container { height: 200px; }
             .title-frame::before, .title-frame::after { content: ""; }
             .floating-smiley { font-size: 1.5rem; }
+            .fallout-terminal {
+                width: 95%;
+                max-height: 85vh;
+                padding: 15px;
+            }
         }
         @media (max-width: 480px) {
             .book-frame { padding: 0.8rem; }
@@ -908,12 +933,24 @@
             .floating-smiley {
                 font-size: 1.2rem;
             }
+            .fallout-terminal {
+                width: 98%;
+                max-height: 90vh;
+                padding: 10px;
+            }
+            .fallout-title {
+                font-size: 1.2rem;
+            }
+            .fallout-time {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="floating-smiley" id="floatingSmiley">𓍊</div>
     <button class="terminal-toggle" id="terminalToggle">⌨</button>
+    <div class="terminal-overlay" id="terminalOverlay"></div>
     <div class="controls">
         <button class="control-btn" id="themeToggle">☀︎</button>
         <button class="control-btn" id="audioToggle">♫</button>
@@ -1620,16 +1657,21 @@
         // Управление видимостью терминала Fallout
         const terminalToggle = document.getElementById('terminalToggle');
         const falloutTerminal = document.getElementById('falloutTerminal');
+        const terminalOverlay = document.getElementById('terminalOverlay');
         
-        terminalToggle.addEventListener('click', () => {
+        function toggleTerminal() {
             const isVisible = falloutTerminal.style.display === 'block';
             falloutTerminal.style.display = isVisible ? 'none' : 'block';
+            terminalOverlay.style.display = isVisible ? 'none' : 'block';
             terminalToggle.classList.toggle('active', !isVisible);
             
             if (!isVisible) {
                 initFalloutTerminal();
             }
-        });
+        }
+        
+        terminalToggle.addEventListener('click', toggleTerminal);
+        terminalOverlay.addEventListener('click', toggleTerminal);
 
         // Инициализация
         document.addEventListener('DOMContentLoaded', () => {
