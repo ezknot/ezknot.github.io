@@ -544,7 +544,7 @@
         }
         .fallout-terminal {
             background-color: #0a0a0a;
-            color: #14fe17;
+            color: #14fe17; /* Зеленый цвет текста для терминала */
             font-family: 'Monofonto', monospace;
             padding: 20px;
             border: 2px solid #14fe17;
@@ -554,6 +554,9 @@
             position: relative;
             overflow: hidden;
             display: none;
+        }
+        .fallout-terminal * {
+            color: #14fe17 !important; /* Принудительно устанавливаем зеленый цвет для всех элементов внутри терминала */
         }
         .fallout-terminal::before {
             content: "";
